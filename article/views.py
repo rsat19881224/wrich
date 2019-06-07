@@ -104,12 +104,6 @@ class ArticleMixin(object):
         # 処理後は詳細ページを表示
         return redirect(article.get_absolute_url())
 
-
-# 未ログインのユーザーにアクセスを許可する場合は、LoginRequiredMixinを継承から外してください。
-#
-# LoginRequiredMixin：未ログインのユーザーをログイン画面に誘導するMixin
-# 参考：https://docs.djangoproject.com/ja/2.1/topics/auth/default/#the-loginrequired-mixin
-
 class ArticleFilterView(LoginRequiredMixin, PaginationMixin, FilterView):
     model = Article
     filterset_class = ArticleFilterSet
