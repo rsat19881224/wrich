@@ -1,0 +1,85 @@
+<form method="post" id="myform" class="form-horizontal">
+    <div class="box-body">
+        <div class="form-group">
+            <label class="col-xs-2 control-label">記事名</label>
+            <div class="col-xs-10">
+                <p>{{  article.intro_title|default_if_none:"未入力"  }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-2 control-label">タイプ</label>
+            <div class="col-xs-10">
+                <p>{{  article.get_intro_type_display|default_if_none:"未入力"  }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-2 control-label">導入文</label>
+            <div class="col-xs-10">
+                <p>{{  article.intro_content|default_if_none:"未入力"  }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-2 control-label">キーワード</label>
+            <div class="col-xs-10">
+                <p>{{  article.keyword|default_if_none:"未入力"  }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-2 control-label">作成者</label>
+            <div class="col-xs-10">
+                <p>{{  article.created_by.get_full_name  }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-2 control-label">作成日時</label>
+            <div class="col-xs-10">
+                <p>{{  article.created_at|date:"Y/m/d G:i:s"  }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-2 control-label">更新者</label>
+            <div class="col-xs-10">
+                <p>{{  article.updated_by.get_full_name  }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-2 control-label">更新日時</label>
+            <div class="col-xs-10">
+                <p>{{  article.updated_at|date:"Y/m/d G:i:s"  }}</p>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="table table-striped">
+    <tbody class="articledetail">
+        {% for detail in article.articledetail_set.all %}
+            <tr>
+                <td>
+                    <label class="col-xs-2 control-label"><div class="text-right">表示順</div></label>
+                    <div class="col-xs-10">
+                        <p>{{  detail.order_id  }}</p>
+                    </div>
+                    <label class="col-xs-2 control-label">見出し</label>
+                    <div class="col-xs-10">
+                        <p>{{  detail.block_title  }}</p>
+                    </div>
+                    <label class="col-xs-2 control-label">内容</label>
+                    <div class="col-xs-10">
+                        <p>{{  detail.block_content  }}</p>
+                    </div>
+                    <label class="col-xs-2 control-label">削除フラグ</label>
+                    <div class="col-xs-10">
+                        <p>{{  detail.DELETE  }}</p>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

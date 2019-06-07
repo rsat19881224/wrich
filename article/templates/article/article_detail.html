@@ -1,0 +1,25 @@
+{% extends "./_base.html" %}
+{% block page_name %}記事詳細{% endblock %}
+{% block page_description %}詳細データを表示します。{% endblock %}
+{% block content %}
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">基本情報</h3>
+            </div><!-- /.box-header -->
+            <div class="col-12">
+                <a class="btn btn-outline-dark float-right" href="{% url 'index' %}">戻る</a>
+            </div>
+            {% include "./article_detail_contents.html" %}
+            <div class="row">
+                <div class="col-12">
+                    <a class="btn btn-outline-dark float-right" href="{% url 'index' %}">戻る</a>
+                    <a class="btn btn-outline-dark float-right" href="{% url 'index' %}">編集</a>
+                    <a class="btn btn-outline-dark float-right" href="{% url 'index' %}">削除</a>
+                </div>
+            </div>
+        </div><!-- /.box -->
+      </div>
+    </div>
+{% endblock %}
