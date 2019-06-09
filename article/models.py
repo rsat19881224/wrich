@@ -8,7 +8,7 @@ class Article(models.Model):
         (1, '【パターン1】うまくいかないのはあなたのせいではありません！'), 
         (2, '【パターン2】これを知らないからできないんです。'), 
         (3, '【パターン3】～だと判明！'))
-    intro_title = models.CharField(verbose_name='記事名', max_length=150, blank=True,)
+    intro_title = models.CharField(verbose_name='記事名', max_length=150, blank=False,)
     intro_type = models.IntegerField(verbose_name='タイプ', choices=INTRO_WRITE_TYPE, default=1,)
     intro_content = models.TextField(verbose_name='導入文', blank=True,)
     keyword = models.TextField(verbose_name='キーワード', blank=True, null=True,)

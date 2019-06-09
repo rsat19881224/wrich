@@ -111,7 +111,7 @@ class ArticleFilterView(LoginRequiredMixin, PaginationMixin, FilterView):
     queryset = Article.objects.all().order_by('-created_at')
 
     # 1ページの表示
-    paginate_by = 20
+    paginate_by = 10
     object = Article
 
     def get(self, request, **kwargs):

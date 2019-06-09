@@ -56,34 +56,34 @@
                 {% empty %}
                 <p>対象のデータがありません</p>
                 {% endfor %}
+
                 </tbody>
             </table>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div>
     </div>
-{% endblock %}
+    
+    <div class="row">
+        <div class="col-xs-12">
+            {% if is_paginated %}
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li><a href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">previous</a></li>
+                {% endif %}
+                {% for link_page in page_obj.paginator.page_range %}
+                    {% if link_page == page_obj.number %}
+                        <li class="active">{{ link_page }}</li>
+                    {% else %}
+                        <li><a href="{% url 'index' %}?page={{ link_page }}">{{ link_page }}</a></li>
+                    {% endif %}
+                {% endfor %}
 
-{% block bottom_script %}
-<!-- DataTables 以下読み込みことでjqueryエラー発生する。-->
-<script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
-<script>
-  $(function () {
-    // デフォルトの設定を変更 日本語化
-    $.extend( $.fn.dataTable.defaults, { 
-        language: {
-            url: "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
-        } 
-    }); 
-
-    $('#article_list').DataTable({
-      'paging'      : true,
-      'lengthChange': true,
-      'searching'   : false,
-      'ordering'    : false,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-  })
-</script>
+                {% if page_obj.has_next %}
+                    <li><a href="{% url 'index' %}?page={{ page_obj.next_page_number }}">next</a></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
