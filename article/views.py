@@ -8,12 +8,15 @@ from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 from .filters import ArticleFilterSet
 from .forms import ArticleForm, ArticleDetailFormSet
 from .models import Article
 
-
+logger.debug("post")
 class FormsetMixin(object):
     object = None
 

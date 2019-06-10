@@ -1,6 +1,6 @@
 {% extends "./_base.html" %}
 {% load bootstrap4 %}
-{% block page_name %}記事作成{% endblock %}
+{% block page_name %}<i class="fa fa-pencil"></i>記事作成{% endblock %}
 {% block page_description %}見出しごとにブロックを追加してください。{% endblock %}
 {% block content %}
 
@@ -10,7 +10,7 @@
 
         <div class="box box-info">
           <div class="box-header with-border">
-            <h3 class="box-title">記事登録</h3>
+            <h3 class="box-title"><i class="fa fa-info-circle"></i>基本情報</h3>
           </div><!-- /.box-header -->
           <div>
             {% bootstrap_formset_errors formset %}
@@ -41,7 +41,7 @@
                     {% for form in formset %}
                         <tr>
                             <td class="align-middle rownum col-xs-2">
-                                <label class="control-label">見出しブロック</label>
+                                <label class="control-label"><i class="fa fa-file-text-o"></i>見出しブロック</label>
                             </td>
                             <td>
                                 {% bootstrap_field form.order_id show_label=true field_class="col-xs-10" %}
@@ -62,7 +62,7 @@
                 {% else %}
                     <a class="btn btn-outline-secondary command" href="{% url 'index' %}">戻る</a>
                 {% endif %}
-                <a class="btn btn-outline-secondary command save" href="#">登録</a>
+                <button type="submit" class="btn btn-outline-secondary command save">登録</button>
             </div>
           </form>
         </div><!-- /.box -->
@@ -74,7 +74,7 @@
     <script type="text/html" id="articledetail-template">
         <tr id="articledetail-__prefix__">
             <td class="align-middle rownum col-xs-2">
-                <label class="control-label">見出しブロック</label>
+                <label class="control-label"><i class="fa fa-file-text-o"></i>見出しブロック</label>
             </td>
             <td>
                 {% bootstrap_field formset.empty_form.order_id show_label=False field_class="col-xs-10" %}
@@ -84,22 +84,13 @@
             </td>
         </tr>
     </script>
+    <script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
     <script>
-        //SimpleMDEを利用できるようにしている。
-        document.addEventListener( 'DOMContentLoaded', function( event ) {
-          var simplemde = new SimpleMDE({
-            element: document.getElementById('id_intro_content'),
-            autosave: {
-              enabled: true,
-              uniqueId: "markdownblogeditor",
-              delay: 1000,
-            },
-            forceSync: true
-          })
-        });
         $(function () {
-            $('.add-articledetail').click(function (e) {
+            CKEDITOR.replace('id_intro_content');
+            CKEDITOR.replace('id_articledetail_set-0-block_content');
 
+            $('.add-articledetail').click(function (e) {
                 e.preventDefault();
                 var count = parseInt($('#id_articledetail_set-TOTAL_FORMS').attr('value'), 10);
                 var tmplMarkup = $('#articledetail-template').html();
@@ -107,7 +98,13 @@
                 console.log(compiledTmpl);
                 $('tbody.articledetail').append(compiledTmpl);
                 $('#id_articledetail_set-TOTAL_FORMS').attr('value', count + 1);
+                var block = 'id_articledetail_set-number-block_content';
+                var block_r = block.replace(/number/g, count);
+                CKEDITOR.replace(block_r);
             });
+            
         });
     </script>
+
 {% endblock bottom_script %}
+

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'article',
     'django_adminlte',
     'django_adminlte_theme',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [

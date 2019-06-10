@@ -1,4 +1,6 @@
-{% load static %}<!DOCTYPE html>
+{% load static %}
+{% load bootstrap4 %}
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     {% block title_outer %}
@@ -16,10 +18,9 @@
     {% endblock %}
 
     {% block extra_head %}{% endblock %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>
     <link rel="stylesheet" href="{% static "article/css/app.css" %}">
 </head>
+
 <body class="hold-transition skin-blue sidebar-mini {% block body_class %}{% block bodyclass %}{% endblock %}{% endblock %}">
 
 {% block body %}
@@ -72,7 +73,7 @@
     </div>
 {% endblock body %}
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
 {% endblock %}
 
 {% block javascript %}
