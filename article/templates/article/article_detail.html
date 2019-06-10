@@ -9,12 +9,10 @@
                 <h3 class="box-title"><i class="fa fa-info-circle"></i>基本情報</h3>
             </div><!-- /.box-header -->
             {% include "./article_detail_contents.html" %}
-            <div class="row">
-                <div class="col-12">
-                    <a class="btn btn-outline-dark float-right" href="{% url 'index' %}">戻る</a>
-                    <a class="btn btn-outline-dark float-right" href="{% url 'index' %}">編集</a>
-                    <a class="btn btn-outline-dark float-right" href="{% url 'index' %}">削除</a>
-                </div>
+            <div class="box-footer">
+                <a href="{% url 'index' %}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>戻る</a>
+                <a href="{% url 'update' article.pk %}" class="btn btn-warning pull-right btn-sm"><i class="fa fa-edit"></i>編集</a>
+                <a href="{% url 'delete' article.pk %}" class="btn btn-danger pull-right btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a>
             </div>
         </div><!-- /.box -->
       </div>
