@@ -10,19 +10,24 @@
         <div class="box-body">
           <div class="dataTables_wrapper form-inline dt-bootstrap">
             <form id="filter" method="get">
-                <div>
-                    {{ filter.form|crispy }}
-                </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-danger" href="/?page=1"><i class="fa fa-eraser"></i>検索を解除</a>
-                        <button type="submit" class="btn btn-default pull-right" form="filter"><i class="fa fa-search"></i>検索</button>
+                        <div>
+                            {{ filter.form|crispy }}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-danger btn-sm" href="/?page=1"><i class="fa fa-close"></i>解除</a>
+                        <button type="submit" class="btn btn-default btn-sm pull-right" form="filter"><i class="fa fa-search"></i>検索</button>
                     </div>
                 </div>
             </form>
           </div>
         </div>
-          <div class="box-body table-responsive no-padding">
+          <div class="box-body table-responsive">
             <table id="article_list" class="table table-bordered">
                 <thead>
                     <tr>

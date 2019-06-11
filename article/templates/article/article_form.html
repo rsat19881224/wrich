@@ -50,6 +50,9 @@
                                 {% bootstrap_field form.DELETE show_label=true field_class="float-right col-xs-10" %}
                             </td>
                         </tr>
+                        {% if forloop.last %}
+                             <input type="hidden" name="counter" id="counter" value="{{ forloop.counter }}">
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -86,15 +89,26 @@
     <script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
     <script>
         $(function () {
+            //導入文に対してCKEDITER適用
             CKEDITOR.replace('id_intro_content');
-            CKEDITOR.replace('id_articledetail_set-0-block_content');
 
+            //見出しに対してCKEDITER適用（編集時）
+            var block_count = $("#counter").val();
+            for( var i = 0; i < block_count; i++ ) {
+                var block_init = 'id_articledetail_set-number-block_content';
+                var block_id = block_init.replace(/number/g, i);
+                CKEDITOR.replace(block_id);
+            }
+
+            //見出しに対してCKEDITER適用（追加ボタン押下時）
             $('.add-articledetail').click(function (e) {
                 e.preventDefault();
                 var count = parseInt($('#id_articledetail_set-TOTAL_FORMS').attr('value'), 10);
                 var tmplMarkup = $('#articledetail-template').html();
                 var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count)
-                console.log(compiledTmpl);
+                block_count ++;
+                compiledTmpl = compiledTmpl.replace('見出しブロック', '見出しブロック' + block_count);
+
                 $('tbody.articledetail').append(compiledTmpl);
                 $('#id_articledetail_set-TOTAL_FORMS').attr('value', count + 1);
                 var block = 'id_articledetail_set-number-block_content';

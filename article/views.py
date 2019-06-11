@@ -16,7 +16,6 @@ from .filters import ArticleFilterSet
 from .forms import ArticleForm, ArticleDetailFormSet
 from .models import Article
 
-logger.debug("post")
 class FormsetMixin(object):
     object = None
 
@@ -37,8 +36,10 @@ class FormsetMixin(object):
         formset_class = self.get_formset_class()
         formset = self.get_formset(formset_class)
         if form.is_valid() and formset.is_valid():
+            logger.debug("is_valid")
             return self.form_valid(form, formset)
         else:
+            logger.debug(formset)
             return self.form_invalid(form, formset)
 
     def get_formset_class(self):
