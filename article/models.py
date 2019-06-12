@@ -13,9 +13,6 @@ class Article(models.Model):
     intro_content = models.TextField(verbose_name='導入文', blank=True,)
     keyword = models.TextField(verbose_name='キーワード', blank=True, null=True,)
     check = models.BooleanField(verbose_name='状態',blank=True, null=True,)
-
-    # 以下、管理項目
-    # 作成者(ユーザー)
     created_by = models.ForeignKey(
         User,
         verbose_name='作成者',
@@ -26,16 +23,7 @@ class Article(models.Model):
         editable=False,
         default=1,
     )
-
-    # 作成時間
-    created_at = models.DateTimeField(
-        verbose_name='作成時間',
-        blank=True,
-        null=True,
-        editable=False,
-    )
-
-    # 更新者(ユーザー)
+    created_at = models.DateTimeField(verbose_name='作成時間',auto_now_add=True)
     updated_by = models.ForeignKey(
         User,
         verbose_name='更新者',
@@ -45,14 +33,7 @@ class Article(models.Model):
         on_delete=models.SET_NULL,
         editable=False,
     )
-
-    # 更新時間
-    updated_at = models.DateTimeField(
-        verbose_name='更新時間',
-        blank=True,
-        null=True,
-        editable=False,
-    )
+    updated_at = models.DateTimeField(verbose_name='更新時間',auto_now=True)
 
     def __str__(self):
         """
@@ -70,7 +51,7 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('detail', args=[str(self.id)])
 
-#20190604 追加
+#20190604
 class ArticleDetail(models.Model):
     article = models.ForeignKey(
         Article,
@@ -79,3 +60,83 @@ class ArticleDetail(models.Model):
     order_id = models.IntegerField(verbose_name='表示順', blank=True, null=True,validators=[validators.MinValueValidator(0)],)
     block_title = models.CharField(verbose_name='見出し', max_length=150,)
     block_content = models.TextField(verbose_name='内容',)
+
+#20190612 記事に対してコメント紐付け
+class Comment(models.Model):
+    target = models.ForeignKey(Article,related_name='Comment_Article',on_delete=models.CASCADE)
+    content = models.TextField(verbose_name='内容',max_length=1000,)
+    is_publick = models.BooleanField(default=False)
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='作成者',
+        blank=True,
+        null=True,
+        related_name='Comment_CreatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+        default=1,
+    )
+    created_at = models.DateTimeField(verbose_name='作成時間',auto_now_add=True)
+    updated_by = models.ForeignKey(
+        User,
+        verbose_name='更新者',
+        blank=True,
+        null=True,
+        related_name='Comment_UpdatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+    )
+    updated_at = models.DateTimeField(verbose_name='更新時間',auto_now=True)
+
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        """
+        管理画面でのタイトル表示
+        """
+        verbose_name = 'コメント'
+        verbose_name_plural = 'コメント'
+
+    def get_absolute_url(self):
+        return reverse('detail', args=[str(self.id)])
+
+#20190612 コメントに対しての返信
+class Reply(models.Model):
+    target = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    content = models.TextField(verbose_name='内容',max_length=1000,)
+    is_public = models.BooleanField(default=False)
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='作成者',
+        blank=True,
+        null=True,
+        related_name='Reply_CreatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+        default=1,
+    )
+    created_at = models.DateTimeField(verbose_name='作成時間',auto_now_add=True)
+    updated_by = models.ForeignKey(
+        User,
+        verbose_name='更新者',
+        blank=True,
+        null=True,
+        related_name='Reply_UpdatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+    )
+    updated_at = models.DateTimeField(verbose_name='更新時間',auto_now=True)
+
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        """
+        管理画面でのタイトル表示
+        """
+        verbose_name = '返信'
+        verbose_name_plural = '返信'
+
+    def get_absolute_url(self):
+        return reverse('detail', args=[str(self.id)])

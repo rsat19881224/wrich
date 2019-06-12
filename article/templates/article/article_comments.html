@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-comments-o"></i>コメント</h3>
+        </div><!-- /.box-header -->
+        {% for comment in article.comment_set.all %}
+            {% if comment.is_public %}
+                名前:{{ comment.name }}<br>
+                テキスト:{{ comment.text }}<br>
+                <a href="{% url 'reply' comment.pk %}">返信する</a><br>
+            
+                {% for reply in comment.reply_set.all %}
+                <div style="margin-left:100px;">
+                    {% if reply.is_public %}
+                        名前:{{ reply.name }}<br>
+                        テキスト:{{ reply.text }}<br>       
+                    {% else %}
+                        <p>まだ承認されていません。(返信コメント)</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+         
+            {% else %}
+                <p>まだ承認されていません。(コメント)</p>
+            {% endif %}
+            <hr>
+        {% endfor %}
+        <div class="box-footer">
+            <a class="btn btn-default btn-block command save" href="{% url 'comment' article.pk %}"><i class="fa fa-plus-square"></i>コメントする</a>
+        </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from article import views
+from . import views
 # アプリケーションのルーティング設定
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('create/', views.ArticleCreateView.as_view(), name='create'),
     path('update/<int:pk>/', views.ArticleUpdateView.as_view(), name='update'),
     path('delete/<int:pk>/', views.ArticleDeleteView.as_view(), name='delete'),
+    path('comment/<int:pk>/', views.CommentView.as_view(), name='comment'),
 ]

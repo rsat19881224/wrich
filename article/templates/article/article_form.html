@@ -44,6 +44,7 @@
                                 <label class="control-label"><i class="fa fa-file-text-o"></i>見出しブロック{{ forloop.counter }}</label>
                             </td>
                             <td>
+                                {% bootstrap_field form.id show_label=false field_class="col-xs-10" %}
                                 {% bootstrap_field form.order_id show_label=true field_class="col-xs-10" %}
                                 {% bootstrap_field form.block_title show_label=true field_class="col-xs-10" %}
                                 {% bootstrap_field form.block_content show_label=true field_class="col-xs-10" %}
@@ -56,7 +57,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <a class="btn btn-default add-articledetail btn-lg btn-block"><i class="fa fa-plus-square"></i>行を追加</a>
+                <a class="btn btn-info add-articledetail btn-block"><i class="fa fa-plus"></i>行を追加</a>
             </div>
             <div class="box-footer">
                 {% if object %}

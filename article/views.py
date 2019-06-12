@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.db import transaction
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.views import generic
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
@@ -13,8 +14,8 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 from .filters import ArticleFilterSet
-from .forms import ArticleForm, ArticleDetailFormSet
-from .models import Article
+from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm
+from .models import Article, Comment, Reply
 
 class FormsetMixin(object):
     object = None
@@ -36,10 +37,10 @@ class FormsetMixin(object):
         formset_class = self.get_formset_class()
         formset = self.get_formset(formset_class)
         if form.is_valid() and formset.is_valid():
-            logger.debug("is_valid")
             return self.form_valid(form, formset)
         else:
             logger.debug(formset)
+            logger.debug(formset.errors)
             return self.form_invalid(form, formset)
 
     def get_formset_class(self):
@@ -155,3 +156,40 @@ class ArticleUpdateView(LoginRequiredMixin, ArticleMixin, FormsetMixin, UpdateVi
 class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     success_url = reverse_lazy('index')
+
+
+class CommentView(generic.CreateView):
+    """/comment/post_pk コメント投稿."""
+    model = Comment
+    fields = '__all__'
+    template_name = 'article/article_comment_form.html'
+ 
+    def form_valid(self, form):
+        article_pk = self.kwargs['pk']
+        article = get_object_or_404(Article, pk=article_pk)
+        logger.debug(article_pk)
+        # 紐づく記事を設定する
+        comment = form.save(commit=False)
+        comment.target = article
+        comment.save()
+ 
+        # 記事詳細にリダイレクト
+        return redirect(article.get_absolute_url())
+
+class ReplyView(generic.CreateView):
+    """/reply/comment_pk 返信コメント投稿."""
+    model = Reply
+    fields = '__all__'
+    template_name = 'article/article_comment_form.html'
+
+    def form_valid(self, form):
+        comment_pk = self.kwargs['pk']
+        comment = get_object_or_404(Comment, pk=comment_pk)
+ 
+        # 紐づくコメントを設定する
+        reply = form.save(commit=False)
+        reply.target = comment
+        reply.save()
+ 
+        # 記事詳細にリダイレクト
+        return redirect(article.get_absolute_url())

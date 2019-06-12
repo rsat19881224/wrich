@@ -3,7 +3,7 @@ from django.forms.models import inlineformset_factory
 from django.forms.widgets import Select
 from ckeditor.widgets import CKEditorWidget
 
-from .models import Article, ArticleDetail
+from .models import Article, ArticleDetail, Comment, Reply
 
 INTRO_WRITE_TYPE = (
         (1, '【パターン1】うまくいかないのはあなたのせいではありません！'), 
@@ -65,3 +65,13 @@ ArticleDetailFormSet = inlineformset_factory(
     min_num=1,
     validate_min=True,
 )
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = '__all__'
