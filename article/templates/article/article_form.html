@@ -63,12 +63,32 @@
                 {% if object %}
                     <a href="{% url 'detail' article.pk %}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>戻る</a>
                 {% else %}
-                    <a href="{% url 'index' %}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>戻る</a>
+                    <a href="{% url 'index' %}" class="btn btn-default"><i class="fa fa-reply"></i>戻る</a>
                 {% endif %}
                 <button type="submit" class="btn btn-primary command save pull-right"><i class="fa fa-save"></i>登録</button>
+
+                <button class="btn btn-primary " data-toggle="modal" data-target="#InfoModal" >info</button>
+
             </div>
           </form>
         </div><!-- /.box -->
+      </div>
+    </div>
+
+    <div class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">確認</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>aaaaaaaaa</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
       </div>
     </div>
 {% endblock %}

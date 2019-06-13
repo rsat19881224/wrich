@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 from logging import getLogger
-
+from django.contrib import messages
 logger = getLogger(__name__)
 
 from .filters import ArticleFilterSet
@@ -98,11 +98,17 @@ class ArticleMixin(object):
 #        article.sub_total = sub_total
 #        article.tax = tax
 #        article.total_amount = total_amount
-        article.created_by = self.request.user
+        
+        #updateの時
+        if getattr(self, 'is_update_view', False):
+            article.updated_by = self.request.user
+        else:
+            article.created_by = self.request.user
 
         # DB更新
         with transaction.atomic():
             article.save()
+            messages.info(self.request, f'記事を作成しました。 タイトル:{article.intro_title} pk:{article.pk}')
             formset.instance = article
             formset.save()
 
@@ -137,6 +143,12 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
 
     model = Article
 
+    def get_context_data(self, **kwargs):
+        article_pk = self.kwargs['pk']
+        context = super().get_context_data(**kwargs)
+        context['comment_list'] = Comment.objects.filter(target=article_pk)
+        return context
+
 
 class ArticleCreateView(LoginRequiredMixin, ArticleMixin, FormsetMixin, CreateView):
     template_name = 'article/article_form.html'
@@ -167,14 +179,14 @@ class CommentView(generic.CreateView):
     def form_valid(self, form):
         article_pk = self.kwargs['pk']
         article = get_object_or_404(Article, pk=article_pk)
-        logger.debug(article_pk)
         # 紐づく記事を設定する
         comment = form.save(commit=False)
         comment.target = article
         comment.save()
  
         # 記事詳細にリダイレクト
-        return redirect(article.get_absolute_url())
+        #return redirect(article.get_absolute_url())
+        return redirect('detail', pk=article_pk)
 
 class ReplyView(generic.CreateView):
     """/reply/comment_pk 返信コメント投稿."""
@@ -183,6 +195,7 @@ class ReplyView(generic.CreateView):
     template_name = 'article/article_comment_form.html'
 
     def form_valid(self, form):
+        
         comment_pk = self.kwargs['pk']
         comment = get_object_or_404(Comment, pk=comment_pk)
  
@@ -192,4 +205,5 @@ class ReplyView(generic.CreateView):
         reply.save()
  
         # 記事詳細にリダイレクト
-        return redirect(article.get_absolute_url())
+        #return redirect('detail', pk=article.id)
+        return redirect('detail', pk=self.kwargs['pk'])

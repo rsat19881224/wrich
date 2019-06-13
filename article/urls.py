@@ -10,4 +10,5 @@ urlpatterns = [
     path('update/<int:pk>/', views.ArticleUpdateView.as_view(), name='update'),
     path('delete/<int:pk>/', views.ArticleDeleteView.as_view(), name='delete'),
     path('comment/<int:pk>/', views.CommentView.as_view(), name='comment'),
+    path('reply/<int:pk>/', views.ReplyView.as_view(), name='reply'),
 ]
