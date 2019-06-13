@@ -4,20 +4,43 @@
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fa fa-comments-o"></i>コメント</h3>
         </div><!-- /.box-header -->
-        {% for comment in comment_list %}
-            名前:{{ comment.created_by }}<br>
-            テキスト:{{ comment.content }}<br>
-            <a href="{% url 'reply' comment.pk %}">返信する</a><br>
-        
-            {% for reply in comment.reply_set.all %}
-            <div style="margin-left:100px;">
-                名前:{{ reply.created_by }}<br>
-                テキスト:{{ reply.content }}<br>       
-            </div>
+
+        <table id="article_list" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>投稿者<br>投稿日時</th>
+                    <th>コメント</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for comment in comment_list %}
+            <tr>
+                <td>
+                    【{{ comment.created_by }}】<br>
+                    {{ comment.created_at }}
+                </td>
+                <td>
+                    <a href="{% url 'update' comment.pk %}" class="">{{ comment.content }}</a>
+                    {% for reply in comment.reply_set.all %}
+                    <hr>
+                    <div>
+                        【{{ reply.created_by }}】<br>
+                        {{ reply.content }}       
+                    </div>
+                    {% endfor %}
+                </td>
+                <td><a href="{% url 'reply' comment.pk %}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>返信</a></td>
+                <td><a href="{% url 'delete' comment.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i></a></td>
+            </tr>
+
+            {% empty %}
+            <p>コメントはありません。</p>
             {% endfor %}
 
-            <hr>
-        {% endfor %}
+            </tbody>
+        </table>
         <div class="box-footer">
             <a class="btn btn-default btn-block command save" href="{% url 'comment' article.pk %}"><i class="fa fa-plus-square"></i>コメントする</a>
         </div>

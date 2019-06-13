@@ -70,6 +70,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = '__all__'
+        widgets = {
+          'content': forms.Textarea(attrs={'cols': 30, 'rows': 1}),
+        }
 
 class ReplyForm(forms.ModelForm):
     class Meta:

@@ -175,7 +175,12 @@ class CommentView(generic.CreateView):
     model = Comment
     fields = '__all__'
     template_name = 'article/article_comment_form.html'
- 
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super().get_form_kwargs(*args, **kwargs)
+        form_kwargs['initial'] = {'target': self.kwargs['pk']}  # フォームに初期値を設定する。
+        return form_kwargs 
+
     def form_valid(self, form):
         article_pk = self.kwargs['pk']
         article = get_object_or_404(Article, pk=article_pk)
