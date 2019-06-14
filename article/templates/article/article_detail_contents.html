@@ -83,8 +83,15 @@
                 </div>
             </div>
         </div>
+        {% if forloop.last %}
+             <input type="hidden" name="counter" id="counter" value="{{ forloop.counter }}">
+        {% endif %}
     {% endfor %}
+    <input type="hidden" name="txtsource" id="txtsource" value="
+        <h2>{{  html_pre  }}</h2>
+    ">
 </form>
+
 
 
 

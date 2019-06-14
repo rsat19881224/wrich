@@ -9,10 +9,13 @@
                 <h3 class="box-title"><i class="fa fa-info-circle"></i>基本情報</h3>
             </div><!-- /.box-header -->
             {% include "./article_detail_contents.html" %}
+
             <div class="box-footer">
-                <a href="{% url 'index' %}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>戻る</a>
+                <a href="{% url 'index' %}" class="btn btn-default "><i class="fa fa-reply"></i>戻る</a>
                 <a href="{% url 'delete' article.pk %}" class="btn btn-danger pull-right btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a>
                 <a href="{% url 'update' article.pk %}" class="btn btn-warning pull-right btn-sm"><i class="fa fa-edit"></i>編集</a>
+                <a href="" class="btn btn-info" data-toggle="modal" data-target="#HTMLModal"><i class="fa fa-play"></i>プレビュー表示</a>
+                
             </div>
         </div><!-- /.box -->
       </div>
@@ -41,5 +44,36 @@
     {% empty %}
     <p>対象のデータがありません</p>
     {% endfor %}
+
+    <div class="modal fade" id="HTMLModal" tabindex="-1" role="dialog" aria-labelledby="HtmlModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="HtmlModalLabel">ページプレビュー</h4>
+          </div>
+          <div class="modal-body">
+            <div id="preview"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+            <button type="button" class="btn btn-primary">HTML出力</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {% include "./article_comments.html" %}
 {% endblock %}
+
+{% block bottom_script %}
+    <script>
+        $(function() {
+            var source = $('input:hidden[name="txtsource"]').val();
+            
+            $('#preview').html(source);
+        });
+    </script>
+{% endblock bottom_script %}

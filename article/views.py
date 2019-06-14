@@ -15,7 +15,7 @@ logger = getLogger(__name__)
 
 from .filters import ArticleFilterSet
 from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm
-from .models import Article, Comment, Reply
+from .models import Article, ArticleDetail, Comment, Reply
 
 class FormsetMixin(object):
     object = None
@@ -146,7 +146,26 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         article_pk = self.kwargs['pk']
         context = super().get_context_data(**kwargs)
+
         context['comment_list'] = Comment.objects.filter(target=article_pk)
+        
+        # htmlプレビュー用データ作成
+        obj = Article.objects.get(id=article_pk)
+        objdetail = ArticleDetail.objects.get(id=article_pk)
+
+        str_Html = obj.intro_title
+        str_Html += obj.intro_content
+
+        #orderbyで表示順にならべた上でfor文で
+        #そもｓもテーブルはselect_relatedを使えないか検証すること
+        #for detail in objdetail:
+        str_Html += objdetail.block_title
+        str_Html += objdetail.block_content
+
+        logger.debug(obj)
+        
+        context['html_pre'] = str_Html
+
         return context
 
 

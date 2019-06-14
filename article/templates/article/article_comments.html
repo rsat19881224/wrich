@@ -6,6 +6,8 @@
         </div><!-- /.box-header -->
 
         <table id="article_list" class="table table-bordered">
+            {% for comment in comment_list %}
+            {% if forloop.first %}
             <thead>
                 <tr>
                     <th>投稿者<br>投稿日時</th>
@@ -14,8 +16,9 @@
                     <th></th>
                 </tr>
             </thead>
+            {% endif %}
             <tbody>
-            {% for comment in comment_list %}
+            
             <tr>
                 <td>
                     【{{ comment.created_by }}】<br>
@@ -36,7 +39,7 @@
             </tr>
 
             {% empty %}
-            <p>コメントはありません。</p>
+            <p> ※コメントはありません。</p>
             {% endfor %}
 
             </tbody>
