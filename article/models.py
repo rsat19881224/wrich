@@ -11,7 +11,7 @@ class Article(models.Model):
     intro_title = models.CharField(verbose_name='記事名', max_length=150, blank=False,)
     intro_type = models.IntegerField(verbose_name='タイプ', choices=INTRO_WRITE_TYPE, default=1,)
     intro_content = models.TextField(verbose_name='導入文', blank=True,)
-    keyword = models.TextField(verbose_name='キーワード', blank=True, null=True,)
+    keyword = models.TextField(verbose_name='タグ', blank=True, null=True,)
     check = models.BooleanField(verbose_name='状態',blank=True, null=True,)
     created_by = models.ForeignKey(
         User,

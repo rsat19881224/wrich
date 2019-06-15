@@ -29,7 +29,7 @@
                     {% for reply in comment.reply_set.all %}
                     <hr>
                     <div>
-                        【{{ reply.created_by }}】<br>
+                        【{{ reply.created_by }}:{{ reply.created_at }}】<br>
                         {{ reply.content }}       
                     </div>
                     {% endfor %}

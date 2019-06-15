@@ -151,19 +151,17 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
         
         # htmlプレビュー用データ作成
         obj = Article.objects.get(id=article_pk)
-        objdetail = ArticleDetail.objects.get(id=article_pk)
+        objdetail = ArticleDetail.objects.select_related().filter(
+            article_id__id=article_pk #公開の記事のみ
+        ).all().order_by('order_id')
 
         str_Html = obj.intro_title
         str_Html += obj.intro_content
 
-        #orderbyで表示順にならべた上でfor文で
-        #そもｓもテーブルはselect_relatedを使えないか検証すること
-        #for detail in objdetail:
-        str_Html += objdetail.block_title
-        str_Html += objdetail.block_content
+        for detail_obj in objdetail:
+            str_Html += detail_obj.block_title
+            str_Html += detail_obj.block_content
 
-        logger.debug(obj)
-        
         context['html_pre'] = str_Html
 
         return context
