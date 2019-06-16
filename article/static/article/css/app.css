@@ -1,3 +1,7 @@
 #id_intro_title {
 	width: 100%;
 }
+
+summary {
+  cursor: pointer;
+}

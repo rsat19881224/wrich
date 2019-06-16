@@ -9,13 +9,13 @@ from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
-from logging import getLogger
 from django.contrib import messages
+from logging import getLogger
 logger = getLogger(__name__)
 
-from .filters import ArticleFilterSet
-from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm
-from .models import Article, ArticleDetail, Comment, Reply
+from .filters import ArticleFilterSet, CategoryFilterSet
+from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm
+from .models import Article, ArticleDetail, Comment, Reply, Category
 
 class FormsetMixin(object):
     object = None
@@ -155,12 +155,18 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
             article_id__id=article_pk #公開の記事のみ
         ).all().order_by('order_id')
 
-        str_Html = obj.intro_title
+        str_Html = '<h2>' + obj.intro_title + '</h2>'
         str_Html += obj.intro_content
 
+        logger.debug(obj.intro_title)
+        logger.debug(obj.intro_content)
+
         for detail_obj in objdetail:
-            str_Html += detail_obj.block_title
+            str_Html += '<h3>' + detail_obj.block_title + '</h3>'
             str_Html += detail_obj.block_content
+
+            logger.debug(detail_obj.block_title)
+            logger.debug(detail_obj.block_content)
 
         context['html_pre'] = str_Html
 
@@ -187,8 +193,58 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('index')
 
 
-class CommentView(generic.CreateView):
-    """/comment/post_pk コメント投稿."""
+
+
+
+
+
+class CategoryFilterView(LoginRequiredMixin, FilterView):
+    model = Category
+    filterset_class = CategoryFilterSet
+
+    queryset = Category.objects.all().order_by('-created_at')
+
+    # 1ページの表示
+    paginate_by = 10
+    object = Category
+
+    def get(self, request, **kwargs):
+        # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
+        if request.GET:
+            request.session['query'] = request.GET
+        # 詳細画面・登録画面からの遷移(GETクエリはない)ならクエリを復元する
+        else:
+            request.GET = request.GET.copy()
+            if 'query' in request.session.keys():
+                for key in request.session['query'].keys():
+                    request.GET[key] = request.session['query'][key]
+
+        return super().get(request, **kwargs)
+
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'article/category_form.html'
+    model = Category
+    form_class = CategoryForm
+
+
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+    is_update_view = True
+    template_name = 'article/category_form.html'
+    model = Category
+    form_class = CategoryForm
+
+
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Category
+    success_url = reverse_lazy('category')
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+
+    model = Category
+
+
+"""/comment/post_pk コメント投稿."""
+class CommentView(generic.CreateView):    
     model = Comment
     fields = '__all__'
     template_name = 'article/article_comment_form.html'
@@ -210,8 +266,10 @@ class CommentView(generic.CreateView):
         #return redirect(article.get_absolute_url())
         return redirect('detail', pk=article_pk)
 
+
+
+"""/reply/comment_pk 返信コメント投稿."""
 class ReplyView(generic.CreateView):
-    """/reply/comment_pk 返信コメント投稿."""
     model = Reply
     fields = '__all__'
     template_name = 'article/article_comment_form.html'

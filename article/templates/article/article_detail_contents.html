@@ -17,7 +17,7 @@
         <div class="form-group">
             <label class="col-xs-2 control-label">導入文</label>
             <div class="col-xs-10">
-                <p class="form-control-static">{{  article.intro_content|default_if_none:"未入力"  }}</p>
+                <p class="form-control-static">{{  article.intro_content|linebreaksbr  }}</p>
             </div>
         </div>
 
@@ -58,9 +58,12 @@
     </div>
     <hr>
     {% for detail in article.articledetail_set.all %}
-        <div class="box-header">
-          <h3 class="box-title"><i class="fa fa-file-text-o"></i>ブロック{{ forloop.counter }}</h3>
-        </div>
+    <details>
+        <summary>
+            <div class="box-header">
+              <h3 class="box-title"><i class="fa fa-file-text-o"></i>ブロック{{ forloop.counter }}</h3>
+            </div>
+        </summary>
         <div class="box-body">
             <div class="form-group">
                 <label class="col-xs-2 control-label">表示順</label>
@@ -79,19 +82,18 @@
             <div class="form-group">
                 <label class="col-xs-2 control-label">内容</label>
                 <div class="col-xs-10">
-                    <p class="form-control-static">{{  detail.block_content  }}</p>
+                    <p class="form-control-static">{{  detail.block_content|linebreaksbr  }}</p>
                 </div>
             </div>
         </div>
+    </details>
         {% if forloop.last %}
              <input type="hidden" name="counter" id="counter" value="{{ forloop.counter }}">
         {% endif %}
     {% endfor %}
     <input type="hidden" name="article_title" id="article_title" value="{{ article.intro_title }}">
     <input type="hidden" name="article_update" id="article_update" value="{{ article.updated_at }}">
-    <input type="hidden" name="txtsource" id="txtsource" value="
-        <h2>{{  html_pre  }}</h2>
-    ">
+    <input type="hidden" name="txtsource" id="txtsource" value="{{  html_pre  }}">
 </form>
 
 

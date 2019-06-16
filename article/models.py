@@ -3,6 +3,38 @@ from django.core import validators
 from users.models import User
 from django.urls import reverse
 
+#20190615
+class Category(models.Model):
+    name = models.CharField(verbose_name='カテゴリ名', max_length=100, null=True,)
+    description = models.TextField(verbose_name='説明', blank=True,)
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='作成者',
+        blank=True,
+        null=True,
+        related_name='CategoryCreatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+        default=1,
+    )
+    created_at = models.DateTimeField(verbose_name='作成時間',auto_now_add=True)
+
+    def __str__(self):
+        """
+        リストボックスや管理画面での表示
+        """
+        return self.name
+
+    class Meta:
+        """
+        管理画面でのタイトル表示
+        """
+        verbose_name = 'カテゴリ'
+        verbose_name_plural = 'カテゴリ'
+
+    def get_absolute_url(self):
+        return reverse('category_detail', args=[str(self.id)])
+
 class Article(models.Model):
     INTRO_WRITE_TYPE = (
         (1, '【パターン1】うまくいかないのはあなたのせいではありません！'), 
@@ -11,6 +43,7 @@ class Article(models.Model):
     intro_title = models.CharField(verbose_name='記事名', max_length=150, blank=False,)
     intro_type = models.IntegerField(verbose_name='タイプ', choices=INTRO_WRITE_TYPE, default=1,)
     intro_content = models.TextField(verbose_name='導入文', blank=True,)
+    category = models.ForeignKey(Category,verbose_name='カテゴリ',related_name='Category_Article',on_delete=models.CASCADE)
     keyword = models.TextField(verbose_name='タグ', blank=True, null=True,)
     check = models.BooleanField(verbose_name='状態',blank=True, null=True,)
     created_by = models.ForeignKey(
