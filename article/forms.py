@@ -2,8 +2,9 @@ from django import forms
 from django.forms.models import inlineformset_factory
 from django.forms.widgets import Select
 from ckeditor.widgets import CKEditorWidget
-
-from .models import Article, ArticleDetail, Comment, Reply, Category
+from logging import getLogger
+logger = getLogger(__name__)
+from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order
 
 INTRO_WRITE_TYPE = (
         (1, '【パターン1】うまくいかないのはあなたのせいではありません！'), 
@@ -73,6 +74,28 @@ ArticleDetailFormSet = inlineformset_factory(
     validate_min=True,
 )
 
+class SiteForm(forms.ModelForm):
+    class Meta:
+        model = Site
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(SiteForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(OrderForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
@@ -87,14 +110,11 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = '__all__'
-        widgets = {
-            'content': forms.Textarea(attrs={'cols': 30, 'rows': 1}),
-        }
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs["class"] = "form-control"
+            self.widget.attrs["class"] = "form-control"
 
 class ReplyForm(forms.ModelForm):
     class Meta:

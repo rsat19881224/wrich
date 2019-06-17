@@ -13,9 +13,9 @@ from django.contrib import messages
 from logging import getLogger
 logger = getLogger(__name__)
 
-from .filters import ArticleFilterSet, CategoryFilterSet
-from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm
-from .models import Article, ArticleDetail, Comment, Reply, Category
+from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet
+from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm
+from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order
 
 class FormsetMixin(object):
     object = None
@@ -193,11 +193,105 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('index')
 
 
+#####################################################
+#
+#
+class SiteFilterView(LoginRequiredMixin, FilterView):
+    model = Site
+    filterset_class = SiteFilterSet
+
+    queryset = Site.objects.all().order_by('-created_at')
+
+    # 1ページの表示
+    paginate_by = 10
+    object = Site
+
+    def get(self, request, **kwargs):
+        # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
+        if request.GET:
+            request.session['query'] = request.GET
+        # 詳細画面・登録画面からの遷移(GETクエリはない)ならクエリを復元する
+        else:
+            request.GET = request.GET.copy()
+            if 'query' in request.session.keys():
+                for key in request.session['query'].keys():
+                    request.GET[key] = request.session['query'][key]
+
+        return super().get(request, **kwargs)
+
+class SiteCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'article/site_form.html'
+    model = Site
+    form_class = SiteForm
 
 
+class SiteUpdateView(LoginRequiredMixin, UpdateView):
+    is_update_view = True
+    template_name = 'article/site_form.html'
+    model = Site
+    form_class = SiteForm
 
 
+class SiteDeleteView(LoginRequiredMixin, DeleteView):
+    model = Site
+    success_url = reverse_lazy('site')
 
+class SiteDetailView(LoginRequiredMixin, DetailView):
+
+    model = Site
+
+
+#####################################################
+#
+#
+class OrderFilterView(LoginRequiredMixin, FilterView):
+    model = Order
+    filterset_class = OrderFilterSet
+
+    queryset = Order.objects.all().order_by('-created_at')
+
+    # 1ページの表示
+    paginate_by = 10
+    object = Order
+
+    def get(self, request, **kwargs):
+        # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
+        if request.GET:
+            request.session['query'] = request.GET
+        # 詳細画面・登録画面からの遷移(GETクエリはない)ならクエリを復元する
+        else:
+            request.GET = request.GET.copy()
+            if 'query' in request.session.keys():
+                for key in request.session['query'].keys():
+                    request.GET[key] = request.session['query'][key]
+
+        return super().get(request, **kwargs)
+
+class OrderCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'article/order_form.html'
+    model = Order
+    form_class = OrderForm
+
+
+class OrderUpdateView(LoginRequiredMixin, UpdateView):
+    is_update_view = True
+    template_name = 'article/order_form.html'
+    model = Order
+    form_class = OrderForm
+
+
+class OrderDeleteView(LoginRequiredMixin, DeleteView):
+    model = Order
+    success_url = reverse_lazy('order')
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+
+    model = Order
+
+
+#####################################################
+#
+#
 class CategoryFilterView(LoginRequiredMixin, FilterView):
     model = Category
     filterset_class = CategoryFilterSet
@@ -242,7 +336,9 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
 
     model = Category
 
-
+#####################################################
+#
+#
 """/comment/post_pk コメント投稿."""
 class CommentView(generic.CreateView):    
     model = Comment

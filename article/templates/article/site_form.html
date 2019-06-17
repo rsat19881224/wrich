@@ -1,0 +1,49 @@
+{% extends "./_base.html" %}
+{% load bootstrap4 %}
+{% block page_name %}<i class="fa fa-pencil"></i>WEBサイト登録{% endblock %}
+{% block page_description %}WEBサイトを追加してください。{% endblock %}
+{% block content %}
+
+    {{ form.certifications.errors }}
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-info-circle"></i>サイト情報</h3>
+          </div><!-- /.box-header -->
+          <form method="post" id="myform" class="form-horizontal">
+            <div class="box-body">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label" for="{{ form.title.id_for_label }}">{{ field.label_tag }}</label>
+                        <div class="col-xs-10">
+                            {{ field }}
+                        </div>
+
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+
+                        {% for error in field.errors %}
+                            <small class="form-text text-danger">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="box-footer">
+                {% if object %}
+                    <a href="{% url 'site_detail' site.pk %}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>戻る</a>
+                {% else %}
+                    <a href="{% url 'site' %}" class="btn btn-default"><i class="fa fa-reply"></i>戻る</a>
+                {% endif %}
+                <button type="submit" class="btn btn-primary command save pull-right"><i class="fa fa-save"></i>登録</button>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div>
+    </div>
+
+{% endblock %}
+

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Article, ArticleDetail, Comment, Reply, Category
+from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order
 
 
 class ArticleDetailInline(admin.TabularInline):
@@ -12,6 +12,8 @@ class ArticleDetailInline(admin.TabularInline):
 class ArticleAdmin(admin.ModelAdmin):
     inlines = [ArticleDetailInline]
 
+admin.site.register(Site)
+admin.site.register(Order)
+admin.site.register(Category)
 admin.site.register(Comment)
 admin.site.register(Reply)
-admin.site.register(Category)

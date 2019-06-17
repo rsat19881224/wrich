@@ -1,0 +1,96 @@
+{% extends "./_base.html" %}
+{% block page_name %}<i class="fa fa-html5"></i>WEBサイト詳細{% endblock %}
+{% block page_description %}詳細データを表示します。{% endblock %}
+{% block content %}
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i>サイト情報</h3>
+            </div><!-- /.box-header -->
+            <form method="post" id="myform" class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">サイト名</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.title  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">URL</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.url  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">ターゲット</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.target  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">サイト概要</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.description  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">備考</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.note  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">ランク</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.get_rank_display  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">責任者</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.orner  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">開設日</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.open_date|date:"Y/m/d"  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">作成者</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.created_by.get_full_name  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">作成日時</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  site.created_at|date:"Y/m/d G:i:s"  }}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </form>
+            <div class="box-footer">
+                <a href="{% url 'site' %}" class="btn btn-default "><i class="fa fa-reply"></i>戻る</a>
+                <a href="{% url 'site_delete' site.pk %}" class="btn btn-danger pull-right btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a>
+                <a href="{% url 'site_update' site.pk %}" class="btn btn-warning pull-right btn-sm"><i class="fa fa-edit"></i>編集</a>
+                
+            </div>
+        </div><!-- /.box -->
+      </div>
+    </div>
+    
+{% endblock %}
+
