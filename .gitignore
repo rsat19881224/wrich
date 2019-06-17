@@ -8,6 +8,6 @@ __pycache__
 local_settings.py
 db.sqlite3
 env
-!/Lib/site-packages/django_adminlte/templates/adminlte/lib
+!env/Lib/site-packages/django_adminlte/templates/adminlte/lib
 media
 
