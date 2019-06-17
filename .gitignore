@@ -7,7 +7,7 @@ __pycache__
 *.py[co]
 local_settings.py
 db.sqlite3
-env
-!env/Lib/site-packages/django_adminlte/templates/adminlte/lib
+/env
+!/env/Lib/site-packages/django_adminlte/templates/adminlte/lib
 media
 
