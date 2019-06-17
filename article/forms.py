@@ -25,6 +25,11 @@ class ArticleForm(forms.ModelForm):
         model = Article
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(ArticleForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
     #各フィールドに対するバリデーションチェック↓ clean_xxxx
     #is_validを抜けてきたデータをごにょごにょする
     def clean_intro_title(self):
@@ -49,6 +54,8 @@ class ArticleDetailForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ArticleDetailForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
 
         #self.fields['item'].choices = lambda: [('', '-- 商品 --')] + [
         #    (item.id, '%s %s円' % (item.name.ljust(10, '　'), item.unit_price)) for item in
@@ -71,6 +78,11 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -79,7 +91,17 @@ class CommentForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'cols': 30, 'rows': 1}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
 class ReplyForm(forms.ModelForm):
     class Meta:
         model = Reply
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(ReplyForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"

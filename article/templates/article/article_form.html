@@ -61,13 +61,13 @@
             </div>
             <div class="box-footer">
                 {% if object %}
-                    <a href="{% url 'detail' article.pk %}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>戻る</a>
+                    <a href="{% url 'detail' article.pk %}" class="btn btn-default"><i class="fa fa-reply"></i>戻る</a>
                 {% else %}
                     <a href="{% url 'index' %}" class="btn btn-default"><i class="fa fa-reply"></i>戻る</a>
                 {% endif %}
                 <button type="submit" class="btn btn-primary command save pull-right"><i class="fa fa-save"></i>登録</button>
 
-                <a href="" class="btn btn-info" data-toggle="modal" data-target="#InfoModal"><i class="fa fa-reply"></i>info</a>
+                <a href="" class="btn btn-default" data-toggle="modal" data-target="#InfoModal"><i class="glyphicon glyphicon-question-sign"></i>info</a>
 
             </div>
           </form>

@@ -21,8 +21,9 @@
                 <br>
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-danger btn-sm" href="/?page=1"><i class="fa fa-close"></i>解除</a>
+                        <a class="btn btn-primary " href="create"><i class="fa fa-plus"></i>新規作成</a>
                         <button type="submit" class="btn btn-default btn-sm pull-right" form="filter"><i class="fa fa-search"></i>検索</button>
+                        <a class="btn btn-danger btn-sm pull-right" href="/?page=1"><i class="fa fa-close"></i>解除</a>
                     </div>
                 </div>
             </form>
@@ -41,21 +42,22 @@
                         <th>作成者</th>
                         <th>作成日</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for article in article_list %}
                 <tr>
-                    <td>{{ article.id }}</td>
-                    <td><a href="{% url 'detail' article.pk %}">{{ article.intro_title }}</a></td>
-                    <td>{{ article.intro_content }}</td>
-                    <td>{{ article.get_intro_type_display }}</td>
-                    <td>{{ article.keyword }}</td>
-                    <td>{{ article.check }}</td>
-                    <td>{{ article.created_by.get_full_name }}</td>
-                    <td>{{ article.created_at|date:"Y/m/d G:i:s" }}</td>
+                    <td rowspan="2">{{ article.id }}</td>
+                    <td rowspan="2"><a href="{% url 'detail' article.pk %}">{{ article.intro_title }}</a></td>
+                    <td rowspan="2">{{ article.intro_content }}</td>
+                    <td rowspan="2">{{ article.get_intro_type_display }}</td>
+                    <td rowspan="2">{{ article.keyword }}</td>
+                    <td rowspan="2">{{ article.check }}</td>
+                    <td rowspan="2">{{ article.created_by.get_full_name }}</td>
+                    <td rowspan="2">{{ article.created_at|date:"Y/m/d G:i:s" }}</td>
                     <td><a href="{% url 'update' article.pk %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>編集</a></td>
+                </tr>
+                <tr>
                     <td><a href="{% url 'delete' article.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
                 </tr>
 
