@@ -1,0 +1,54 @@
+{% extends "./_base.html" %}
+{% load bootstrap4 %}
+{% block page_name %}<i class="fa fa-pencil"></i>お知らせ作成{% endblock %}
+{% block page_description %}お知らせを追加してください。{% endblock %}
+{% block extra_head %}<link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">{% endblock %}
+{% block content %}
+
+    {{ form.certifications.errors }}
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-info-circle"></i>お知らせ情報</h3>
+          </div><!-- /.box-header -->
+          <form method="post" id="myform" class="form-horizontal">
+            <div class="box-body">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label" for="{{ form.intro_title.id_for_label }}">{{ field.label_tag }}</label>
+                        <div class="col-xs-10">
+                            {{ field }}
+                        </div>
+
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+
+                        {% for error in field.errors %}
+                            <small class="form-text text-danger">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="box-footer">
+                {% if object %}
+                    <a href="{% url 'info_detail' info.pk %}" class="btn btn-default btn-sm"><i class="fa fa-reply"></i>戻る</a>
+                {% else %}
+                    <a href="{% url 'info' %}" class="btn btn-default"><i class="fa fa-reply"></i>戻る</a>
+                {% endif %}
+                <button type="submit" class="btn btn-primary command save pull-right"><i class="fa fa-save"></i>登録</button>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div>
+    </div>
+
+{% endblock %}
+{% block bottom_script %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script> 
+{% endblock %}

@@ -2,9 +2,10 @@ from django import forms
 from django.forms.models import inlineformset_factory
 from django.forms.widgets import Select
 from ckeditor.widgets import CKEditorWidget
+import bootstrap_datepicker_plus as datetimepicker
 from logging import getLogger
 logger = getLogger(__name__)
-from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order
+from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info
 
 INTRO_WRITE_TYPE = (
         (1, '【パターン1】うまくいかないのはあなたのせいではありません！'), 
@@ -130,3 +131,29 @@ class ReplyForm(forms.ModelForm):
     class Meta:
         model = Reply
         fields = '__all__'
+
+class InfoForm(forms.ModelForm):
+    class Meta:
+        model = Info
+        fields = '__all__'
+        widgets = {
+            'public_date': datetimepicker.DatePickerInput(
+                format='%Y-%m-%d',
+                options={
+                    'locale': 'ja',
+                    'dayViewHeaderFormat': 'YYYY年 MMMM',
+                }
+            ).start_of('期間'),
+
+            'close_date': datetimepicker.DatePickerInput(
+                format='%Y-%m-%d',
+                options={
+                    'locale': 'ja',
+                    'dayViewHeaderFormat': 'YYYY年 MMMM',
+                }
+            ).end_of('期間'),
+        }
+    def __init__(self, *args, **kwargs):
+        super(InfoForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"

@@ -281,3 +281,50 @@ class Reply(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail', args=[str(self.id)])
+
+
+#20190619 お知らせ機能
+class Info(models.Model):
+    TARGET_TYPE = (
+        (1, 'ALL'), 
+        (2, 'PEEP'), 
+        (3, 'ライター'))
+    note = models.TextField(verbose_name='お知らせ', blank=True,)
+    public_date = models.DateField(verbose_name='公開日',blank=True,)
+    close_date = models.DateField(verbose_name='終了日',blank=True,)
+    target_group = models.IntegerField(verbose_name='対象グループ', choices=TARGET_TYPE, default=1)
+    
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='作成者',
+        blank=True,
+        null=True,
+        related_name='Info_CreatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+        default=1,
+    )
+    created_at = models.DateTimeField(verbose_name='作成日',auto_now_add=True)
+    updated_by = models.ForeignKey(
+        User,
+        verbose_name='更新者',
+        blank=True,
+        null=True,
+        related_name='Info_UpdatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+    )
+    updated_at = models.DateTimeField(verbose_name='更新日',auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        """
+        管理画面でのタイトル表示
+        """
+        verbose_name = 'お知らせ'
+        verbose_name_plural = 'お知らせ'
+
+    def get_absolute_url(self):
+        return reverse('info_detail', args=[str(self.id)])

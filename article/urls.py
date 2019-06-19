@@ -33,4 +33,10 @@ urlpatterns = [
     path('order/create/', views.OrderCreateView.as_view(), name='order_create'),
     path('order/update/<int:pk>/', views.OrderUpdateView.as_view(), name='order_update'),
     path('order/delete/<int:pk>/', views.OrderDeleteView.as_view(), name='order_delete'),
+
+    path('info/', views.InfoFilterView.as_view(), name='info'),
+    path('info/detail/<int:pk>/', views.InfoDetailView.as_view(), name='info_detail'),
+    path('info/create/', views.InfoCreateView.as_view(), name='info_create'),
+    path('info/update/<int:pk>/', views.InfoUpdateView.as_view(), name='info_update'),
+    path('info/delete/<int:pk>/', views.InfoDeleteView.as_view(), name='info_delete'),
 ]

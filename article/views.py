@@ -15,9 +15,9 @@ logger = getLogger(__name__)
 
 import requests
 
-from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet
-from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm
-from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order
+from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet, InfoFilterSet
+from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm, InfoForm
+from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info
 
 #Chatwork連携用
 CHATWORK_API_TOKEN = '5b9460499bb66c1b61f650eeccbc08dd'
@@ -428,3 +428,47 @@ class ReplyUpdateView(generic.UpdateView):
         messages.success(
             self.request, '返信コメントを「{}」に更新しました'.format(form.instance))
         return result
+
+class InfoFilterView(LoginRequiredMixin, FilterView):
+    model = Info
+    filterset_class = InfoFilterSet
+
+    queryset = Info.objects.all().order_by('-created_at')
+
+    # 1ページの表示
+    paginate_by = 10
+    object = Info
+
+    def get(self, request, **kwargs):
+        # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
+        if request.GET:
+            request.session['query'] = request.GET
+        # 詳細画面・登録画面からの遷移(GETクエリはない)ならクエリを復元する
+        else:
+            request.GET = request.GET.copy()
+            if 'query' in request.session.keys():
+                for key in request.session['query'].keys():
+                    request.GET[key] = request.session['query'][key]
+
+        return super().get(request, **kwargs)
+
+class InfoCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'article/info_form.html'
+    model = Info
+    form_class = InfoForm
+
+
+class InfoUpdateView(LoginRequiredMixin, UpdateView):
+    is_update_view = True
+    template_name = 'article/info_form.html'
+    model = Info
+    form_class = InfoForm
+
+
+class InfoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Info
+    success_url = reverse_lazy('info')
+
+class InfoDetailView(LoginRequiredMixin, DetailView):
+
+    model = Info

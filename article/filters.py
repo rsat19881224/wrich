@@ -1,7 +1,7 @@
 import django_filters
 from django.db import models
 
-from .models import Article, Category, Site, Order
+from .models import Article, Category, Site, Order, Info
 
 
 class OrderingFilter(django_filters.filters.OrderingFilter):
@@ -133,6 +133,36 @@ class CategoryFilterSet(django_filters.FilterSet):
     class Meta:
         model = Category
         fields = ('name', 'description', 'created_by','created_at',)
+        # 文字列検索のデフォルトを部分一致に変更
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+            models.TextField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+        }
+
+class InfoFilterSet(django_filters.FilterSet):
+    order_by = OrderingFilter(
+        initial='作成日',
+        fields=(
+            ('created_at', 'created_at'),
+        ),
+        field_labels={
+            'created_at': '作成日',
+        },
+        label='並び順'
+    )
+    class Meta:
+        model = Info
+        fields = ('note', 'target_group', 'public_date','close_date','created_by','created_at',)
         # 文字列検索のデフォルトを部分一致に変更
         filter_overrides = {
             models.CharField: {

@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django_adminlte',
     'django_adminlte_theme',
     'ckeditor',
-    'chatwork',
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [
