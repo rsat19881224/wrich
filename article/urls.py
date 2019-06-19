@@ -4,6 +4,7 @@ from . import views
 # アプリケーションのルーティング設定
 
 urlpatterns = [
+    path('myboard/', views.MyboardView.as_view(), name='myboard'),
     path('', views.ArticleFilterView.as_view(), name='index'),
     path('detail/<int:pk>/', views.ArticleDetailView.as_view(), name='detail'),
     path('create/', views.ArticleCreateView.as_view(), name='create'),
@@ -11,7 +12,9 @@ urlpatterns = [
     path('delete/<int:pk>/', views.ArticleDeleteView.as_view(), name='delete'),
 
     path('comment/<int:pk>/', views.CommentView.as_view(), name='comment'),
+    path('comment/update/<int:pk>/', views.CommentUpdateView.as_view(), name='comment_update'),
     path('reply/<int:pk>/', views.ReplyView.as_view(), name='reply'),
+    path('reply/update/<int:pk>/', views.ReplyUpdateView.as_view(), name='reply_update'),
 
     path('category/', views.CategoryFilterView.as_view(), name='category'),
     path('category/detail/<int:pk>/', views.CategoryDetailView.as_view(), name='category_detail'),
@@ -24,7 +27,7 @@ urlpatterns = [
     path('site/create/', views.SiteCreateView.as_view(), name='site_create'),
     path('site/update/<int:pk>/', views.SiteUpdateView.as_view(), name='site_update'),
     path('site/delete/<int:pk>/', views.SiteDeleteView.as_view(), name='site_delete'),
-    
+
     path('order/', views.OrderFilterView.as_view(), name='order'),
     path('order/detail/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),
     path('order/create/', views.OrderCreateView.as_view(), name='order_create'),

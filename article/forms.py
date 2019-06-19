@@ -56,6 +56,7 @@ class ArticleDetailForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ArticleDetailForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
+            logger.debug(field)
             field.widget.attrs["class"] = "form-control"
 
         #self.fields['item'].choices = lambda: [('', '-- 商品 --')] + [
@@ -84,7 +85,6 @@ class SiteForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"
 
-
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
@@ -107,21 +107,26 @@ class CategoryForm(forms.ModelForm):
             field.widget.attrs["class"] = "form-control"
 
 class CommentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        logger.debug('コメント2')
+        super(CommentForm, self).__init__(*args, **kwargs)
+        logger.debug('コメント3')
+        for field in self.fields.values():
+            logger.debug(field)
+            field.widget.attrs["class"] = "form-control"
+
     class Meta:
         model = Comment
         fields = '__all__'
+        logger.debug('コメント1')
 
-    def __init__(self, *args, **kwargs):
-        super(CommentForm, self).__init__(*args, **kwargs)
-        for field in self.fields.values():
-            self.widget.attrs["class"] = "form-control"
+
 
 class ReplyForm(forms.ModelForm):
-    class Meta:
-        model = Reply
-        fields = '__all__'
-
     def __init__(self, *args, **kwargs):
         super(ReplyForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"
+    class Meta:
+        model = Reply
+        fields = '__all__'

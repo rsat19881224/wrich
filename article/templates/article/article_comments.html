@@ -21,20 +21,20 @@
             
             <tr>
                 <td>
-                    【{{ comment.created_by }}】<br>
-                    {{ comment.created_at }}
+                    <i class="glyphicon glyphicon-user"></i>{{ comment.created_by }}<br>
+                    <i class="glyphicon glyphicon-time"></i>{{ comment.created_at }}
                 </td>
                 <td>
-                    <a href="{% url 'update' comment.pk %}" class="">{{ comment.content }}</a>
+                    <a href="{% url 'comment_update' comment.pk %}" class="">{{ comment.content }}</a>
                     {% for reply in comment.reply_set.all %}
                     <hr>
-                    <div>
-                        【{{ reply.created_by }}:{{ reply.created_at }}】<br>
-                        {{ reply.content }}       
+                    <div style="margin-left:50px;">
+                        <i class="fa fa-mail-reply"></i><i class="glyphicon glyphicon-user"></i>{{ reply.created_by }}:<i class="glyphicon glyphicon-time"></i>{{ reply.created_at }}<br>
+                        <a href="{% url 'reply_update' reply.pk %}" class="">{{ reply.content }}</a>
                     </div>
                     {% endfor %}
                 </td>
-                <td><a href="{% url 'reply' comment.pk %}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>返信</a></td>
+                <td><a href="{% url 'reply' comment.pk %}" class="btn btn-primary btn-sm"><i class="fa fa-mail-reply"></i>返信</a></td>
                 <td><a href="{% url 'delete' comment.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
             </tr>
 

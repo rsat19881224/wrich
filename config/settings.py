@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_adminlte',
     'django_adminlte_theme',
     'ckeditor',
+    'chatwork',
 ]
 
 MIDDLEWARE = [
@@ -141,7 +142,6 @@ LOGOUT_REDIRECT_URL = '/'
 # django-crispy-forms
 # https://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 
 # django-filter
 # https://django-filter.readthedocs.io/en/latest/ref/settings.html#filters-verbose-lookups

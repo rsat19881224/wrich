@@ -5,7 +5,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import generic
-from django.views.generic import DetailView
+from django.views.generic import DetailView,TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
@@ -13,9 +13,19 @@ from django.contrib import messages
 from logging import getLogger
 logger = getLogger(__name__)
 
+import requests
+
 from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet
 from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm
 from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order
+
+#Chatwork連携用
+CHATWORK_API_TOKEN = '5b9460499bb66c1b61f650eeccbc08dd'
+CHATWORK_API_ROOM_ID = '81445055'
+CHATWORK_API_ENDPOINT_BASE = 'https://api.chatwork.com/v2' # default
+CHATWORK_API_BACKEND = 'chatwork.backends.http.UrllibBackend' # default if DEBUG = False
+CHATWORK_API_FAIL_SILENTLY = None   # default
+
 
 class FormsetMixin(object):
     object = None
@@ -108,7 +118,18 @@ class ArticleMixin(object):
         # DB更新
         with transaction.atomic():
             article.save()
-            messages.info(self.request, f'記事を作成しました。 タイトル:{article.intro_title} pk:{article.pk}')
+
+            message  = '[info][title]さんが記事を作成しました。'
+            #message  += '[/title]' + 'タイトル:' + article.intro_title + 'pk:' + article.pk + '[/info]' 
+            #message  = '[info][title]' + self.request.user.get_username + 'さんが記事を作成しました。'
+
+            post_message_url = '{}/rooms/{}/messages'.format(CHATWORK_API_ENDPOINT_BASE, CHATWORK_API_ROOM_ID)
+            headers = { 'X-ChatWorkToken': CHATWORK_API_TOKEN}
+            params = { 'body': message }
+            r = requests.post(post_message_url,headers=headers,params=params)
+            print(r)
+
+            messages.success(self.request, f'記事を作成しました。 タイトル:{article.intro_title} pk:{article.pk}'.format(form.instance))
             formset.instance = article
             formset.save()
 
@@ -158,15 +179,9 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
         str_Html = '<h2>' + obj.intro_title + '</h2>'
         str_Html += obj.intro_content
 
-        logger.debug(obj.intro_title)
-        logger.debug(obj.intro_content)
-
         for detail_obj in objdetail:
             str_Html += '<h3>' + detail_obj.block_title + '</h3>'
             str_Html += detail_obj.block_content
-
-            logger.debug(detail_obj.block_title)
-            logger.debug(detail_obj.block_content)
 
         context['html_pre'] = str_Html
 
@@ -191,6 +206,10 @@ class ArticleUpdateView(LoginRequiredMixin, ArticleMixin, FormsetMixin, UpdateVi
 class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     success_url = reverse_lazy('index')
+
+
+class MyboardView(TemplateView):
+    template_name = 'article/Myboard.html'
 
 
 #####################################################
@@ -362,6 +381,16 @@ class CommentView(generic.CreateView):
         #return redirect(article.get_absolute_url())
         return redirect('detail', pk=article_pk)
 
+class CommentUpdateView(generic.UpdateView):
+    template_name = 'article/article_comment_form.html'
+    model = Comment
+    fields = '__all__'
+    
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        messages.success(
+            self.request, 'コメントを「{}」に更新しました'.format(form.instance))
+        return result
 
 
 """/reply/comment_pk 返信コメント投稿."""
@@ -369,6 +398,11 @@ class ReplyView(generic.CreateView):
     model = Reply
     fields = '__all__'
     template_name = 'article/article_comment_form.html'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super().get_form_kwargs(*args, **kwargs)
+        form_kwargs['initial'] = {'target': self.kwargs['pk']}  # フォームに初期値を設定する。
+        return form_kwargs 
 
     def form_valid(self, form):
         
@@ -383,3 +417,14 @@ class ReplyView(generic.CreateView):
         # 記事詳細にリダイレクト
         #return redirect('detail', pk=article.id)
         return redirect('detail', pk=self.kwargs['pk'])
+
+class ReplyUpdateView(generic.UpdateView):
+    template_name = 'article/article_comment_form.html'
+    model = Reply
+    fields = '__all__'
+    
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        messages.success(
+            self.request, '返信コメントを「{}」に更新しました'.format(form.instance))
+        return result

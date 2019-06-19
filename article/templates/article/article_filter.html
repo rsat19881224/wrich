@@ -39,8 +39,7 @@
                         <th style="width:200px;text-align:center;">タイプ</th>
                         <th style="width:200px;text-align:center;">タグ</th>
                         <th style="width:80px;text-align:center;">状態</th>
-                        <th style="width:80px;text-align:center;">作成者</th>
-                        <th style="width:80px;text-align:center;">作成日</th>
+                        <th style="width:80px;text-align:center;">作成者/作成日</th>
                         <th style="width:80px;text-align:center;"></th>
                     </tr>
                 </thead>
@@ -53,11 +52,11 @@
                     <td rowspan="2">{{ article.get_intro_type_display }}</td>
                     <td rowspan="2">{{ article.keyword }}</td>
                     <td rowspan="2">{{ article.check }}</td>
-                    <td rowspan="2">{{ article.created_by.get_full_name }}</td>
-                    <td rowspan="2">{{ article.created_at|date:"Y/m/d G:i:s" }}</td>
+                    <td>{{ article.created_by.get_full_name }}</td>
                     <td><a href="{% url 'update' article.pk %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>編集</a></td>
                 </tr>
                 <tr>
+                    <td>{{ article.created_at|date:"Y/m/d G:i:s" }}</td>
                     <td><a href="{% url 'delete' article.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
                 </tr>
 
