@@ -1,0 +1,63 @@
+{% extends "./_base.html" %}
+{% load bootstrap4 %}
+{% block page_name %}<i class="fa fa-pencil"></i>Imageファイル詳細{% endblock %}
+{% block page_description %}画像ファイル詳細表示。{% endblock %}
+{% block content %}
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i>詳細情報</h3>
+            </div><!-- /.box-header -->
+            <form method="post" id="myform" class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">タイトル</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  image.title  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">説明</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  image.description  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">公開日</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  image.ImageField  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">作成者</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  image.created_by.get_full_name  }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">作成日時</label>
+                        <div class="col-xs-10">
+                            <p class="form-control-static">{{  image.created_at|date:"Y/m/d G:i:s"  }}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </form>
+            <div class="box-footer">
+                <a href="{% url 'image' %}" class="btn btn-default "><i class="fa fa-reply"></i>戻る</a>
+                <a href="{% url 'image' image.pk %}" class="btn btn-danger pull-right btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a>
+                <a href="{% url 'image/upload/' image.pk %}" class="btn btn-warning pull-right btn-sm"><i class="fa fa-edit"></i>編集</a>
+                
+            </div>
+        </div><!-- /.box -->
+      </div>
+    </div>
+
+
+{% endblock %}

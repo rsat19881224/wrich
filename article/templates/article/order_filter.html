@@ -53,14 +53,14 @@
                     <td rowspan="2">{{ order.keyword }}</td>
                     <td rowspan="2">{{ order.description }}</td>
                     <td>{{ order.limit_date|date:"Y/m/d" }}</td>
-                    <td>{{ order.order_by|date:"Y/m/d"  }}</td>
+                    <td>{{ order.order_date|date:"Y/m/d"  }}</td>
                     <td>{{ order.created_at|date:"Y/m/d G:i:s" }}</td>
                     <td><a href="{% url 'order_update' order.pk %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>編集</a></td>
                 </tr>
                 <tr>
                     <td>{{ order.salary }}</td>
-                    <td>{{ order.order_at }}</td>
-                    <td>{{ order.created_by.get_full_name }}</td>
+                    <td>{{ order.order_user.get_full_name }}</td>
+                    <td>{{ order.created_at.get_full_name }}</td>
                     <td><a href="{% url 'order_delete' order.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
                 </tr>
 

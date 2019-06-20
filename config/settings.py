@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django_adminlte_theme',
     'ckeditor',
     'bootstrap_datepicker_plus',
+    'imagekit',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [

@@ -76,14 +76,14 @@
                     <div class="form-group">
                         <label class="col-xs-2 control-label">発注日</label>
                         <div class="col-xs-10">
-                            <p class="form-control-static">{{  order.order_at|date:"Y/m/d"  }}</p>
+                            <p class="form-control-static">{{  order.order_date|date:"Y/m/d"  }}</p>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-xs-2 control-label">発注先</label>
                         <div class="col-xs-10">
-                            <p class="form-control-static">{{  order.order_by.get_full_name  }}</p>
+                            <p class="form-control-static">{{  order.order_user.get_full_name  }}</p>
                         </div>
                     </div>
 

@@ -2,6 +2,29 @@ from django.db import models
 from django.core import validators
 from users.models import User
 from django.urls import reverse
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFill
+
+#20190620
+class Image(models.Model):
+    title = models.CharField(verbose_name='タイトル', blank=True, null=True,max_length=255)
+    description = models.CharField(verbose_name='説明',max_length=255, blank=True, null=True,)
+    origin = models.ImageField(verbose_name='ファイル選択',upload_to="uploads/%y/%m/%d/")
+    big = ImageSpecField(source="origin",processors=[ResizeToFill(1280, 1024)],format='JPEG')
+    thumbnail = ImageSpecField(source='origin',processors=[ResizeToFill(250,250)],format="JPEG",options={'quality': 60})
+    middle = ImageSpecField(source='origin',processors=[ResizeToFill(600, 400)],format="JPEG",options={'quality': 75})
+    small = ImageSpecField(source='origin',processors=[ResizeToFill(75,75)],format="JPEG",options={'quality': 50})
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='登録者',
+        blank=True,
+        null=True,
+        related_name='image_CreatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+        default=1,
+    )
+    created_at = models.DateTimeField(verbose_name='登録日',auto_now=True)
 
 #20190617
 class Site(models.Model):
@@ -12,9 +35,9 @@ class Site(models.Model):
     title = models.CharField(verbose_name='サイト名', max_length=150, blank=False,)
     url = models.CharField(verbose_name='URL', max_length=255, blank=False,)
     target = models.TextField(verbose_name='ターゲット', blank=True, null=True,)
-    description = models.TextField(verbose_name='サイト概要', blank=True,)
-    note = models.TextField(verbose_name='備考', blank=True,)
-    open_date = models.DateField(verbose_name='開設日',blank=True,)
+    description = models.TextField(verbose_name='サイト概要', null=True, blank=True,)
+    note = models.TextField(verbose_name='備考', null=True, blank=True,)
+    open_date = models.DateField(verbose_name='開設日',null=True, blank=True,)
     rank = models.IntegerField(verbose_name='ランク', choices=SITE_TYPE, default=2,)
     orner = models.ForeignKey(User,verbose_name='責任者',related_name='site_orner',on_delete=models.SET_NULL,blank=True, null=True,default=1)
     
@@ -88,6 +111,7 @@ class Category(models.Model):
 #20190617
 class Order(models.Model):
     STATUS_TYPE = (
+        (0, '指示中'), 
         (1, '執筆中'), 
         (2, '入稿済み'), 
         (3, '公開済み'))
@@ -100,11 +124,11 @@ class Order(models.Model):
     note = models.TextField(verbose_name='備考', blank=True,)
     limit_date = models.DateField(verbose_name='納期',blank=True,)
     salary = models.IntegerField(verbose_name='報酬', blank=True,)
-    order_at = models.ForeignKey(User,verbose_name='発注日',related_name='order_user',on_delete=models.SET_NULL, blank=True, null=True,default=1)
-    order_by = models.DateField(verbose_name='発注先',blank=True,)
+    order_user = models.ForeignKey(User,verbose_name='発注先',related_name='order_user',on_delete=models.SET_NULL, blank=True, null=True,default=1)
+    order_date = models.DateField(verbose_name='発注日',blank=True,)
     accept_date = models.DateField(verbose_name='受注日',blank=True,)
-    category = models.ForeignKey(Category,verbose_name='カテゴリ',related_name='order_category',on_delete=models.CASCADE)
-    status = models.IntegerField(verbose_name='状態', choices=STATUS_TYPE, default=1,)
+    category = models.ForeignKey(Category,verbose_name='カテゴリ',related_name='order_category',null=True, blank=True,on_delete=models.CASCADE)
+    status = models.IntegerField(verbose_name='状態', choices=STATUS_TYPE, default=0,)
     created_by = models.ForeignKey(
         User,
         verbose_name='作成者',
@@ -151,9 +175,10 @@ class Article(models.Model):
     intro_title = models.CharField(verbose_name='記事名', max_length=150, blank=False,)
     intro_type = models.IntegerField(verbose_name='タイプ', choices=INTRO_WRITE_TYPE, default=1,)
     intro_content = models.TextField(verbose_name='導入文', blank=True,)
-    category = models.ForeignKey(Category,verbose_name='カテゴリ',related_name='Category_Article',on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,verbose_name='カテゴリ',related_name='Category_Article',null=True, blank=True,on_delete=models.CASCADE)
     keyword = models.TextField(verbose_name='タグ', blank=True, null=True,)
     check = models.BooleanField(verbose_name='状態',blank=True, null=True,)
+    order_id = models.ForeignKey(Order,verbose_name='オーダー',related_name='Order_Article', null=True, blank=True,on_delete=models.CASCADE,db_constraint=False)
     created_by = models.ForeignKey(
         User,
         verbose_name='作成者',
@@ -289,9 +314,9 @@ class Info(models.Model):
         (1, 'ALL'), 
         (2, 'PEEP'), 
         (3, 'ライター'))
-    note = models.TextField(verbose_name='お知らせ', blank=True,)
-    public_date = models.DateField(verbose_name='公開日',blank=True,)
-    close_date = models.DateField(verbose_name='終了日',blank=True,)
+    note = models.TextField(verbose_name='お知らせ', blank=False,)
+    public_date = models.DateField(verbose_name='公開日',null=True, blank=True,)
+    close_date = models.DateField(verbose_name='終了日',null=True, blank=True,)
     target_group = models.IntegerField(verbose_name='対象グループ', choices=TARGET_TYPE, default=1)
     
     created_by = models.ForeignKey(

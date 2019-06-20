@@ -58,33 +58,39 @@
     </div>
     <hr>
     {% for detail in article.articledetail_set.all %}
-    <details>
-        <summary>
-              <i class="fa fa-file-text-o"></i>ブロック{{ forloop.counter }}
-        </summary>
-        <div class="box-body">
-            <div class="form-group">
-                <label class="col-xs-2 control-label">表示順</label>
-                <div class="col-xs-10">
-                    <p class="form-control-static">{{  detail.order_id  }}</p>
-                </div>
-            </div>
+        <div class="box">
+            <div class="box-header with-border">
+              <h4 class="box-title"><i class="fa fa-file-text-o"></i>ブロック{{ forloop.counter }}</h4>
 
-            <div class="form-group">
-                <label class="col-xs-2 control-label">見出し</label>
-                <div class="col-xs-10">
-                    <p class="form-control-static">{{  detail.block_title  }}</p>
-                </div>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"　title="Collapse">
+                  <i class="fa fa-minus"></i></button>
+              </div>
             </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">表示順</label>
+                    <div class="col-xs-10">
+                        <p class="form-control-static">{{  detail.order_id  }}</p>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label class="col-xs-2 control-label">内容</label>
-                <div class="col-xs-10">
-                    <p class="form-control-static">{{  detail.block_content|linebreaksbr  }}</p>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">見出し</label>
+                    <div class="col-xs-10">
+                        <p class="form-control-static">{{  detail.block_title  }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">内容</label>
+                    <div class="col-xs-10">
+                        <p class="form-control-static">{{  detail.block_content|linebreaksbr  }}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </details>
+        <!-- /.box -->
         {% if forloop.last %}
              <input type="hidden" name="counter" id="counter" value="{{ forloop.counter }}">
         {% endif %}

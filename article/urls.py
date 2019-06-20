@@ -39,4 +39,8 @@ urlpatterns = [
     path('info/create/', views.InfoCreateView.as_view(), name='info_create'),
     path('info/update/<int:pk>/', views.InfoUpdateView.as_view(), name='info_update'),
     path('info/delete/<int:pk>/', views.InfoDeleteView.as_view(), name='info_delete'),
+
+    path('image/', views.image_list, name='image_list'),
+    path('image/upload/', views.upload, name='image_upload'),
+    path('image/detail/<int:pk>/', views.image, name='image_detail'),
 ]

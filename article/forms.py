@@ -5,7 +5,7 @@ from ckeditor.widgets import CKEditorWidget
 import bootstrap_datepicker_plus as datetimepicker
 from logging import getLogger
 logger = getLogger(__name__)
-from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info
+from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info, Image
 
 INTRO_WRITE_TYPE = (
         (1, '【パターン1】うまくいかないのはあなたのせいではありません！'), 
@@ -80,6 +80,15 @@ class SiteForm(forms.ModelForm):
     class Meta:
         model = Site
         fields = '__all__'
+        widgets = {
+            'open_date': datetimepicker.DatePickerInput(
+                format='%Y-%m-%d',
+                options={
+                    'locale': 'ja',
+                    'dayViewHeaderFormat': 'YYYY年 MMMM',
+                }
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super(SiteForm, self).__init__(*args, **kwargs)
@@ -90,6 +99,30 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
+        widgets = {
+            'limit_date': datetimepicker.DatePickerInput(
+                format='%Y-%m-%d',
+                options={
+                    'locale': 'ja',
+                    'dayViewHeaderFormat': 'YYYY年 MMMM',
+                }
+            ),
+            'order_date': datetimepicker.DatePickerInput(
+                format='%Y-%m-%d',
+                options={
+                    'locale': 'ja',
+                    'dayViewHeaderFormat': 'YYYY年 MMMM',
+                }
+            ).start_of('期間'),
+
+            'accept_date': datetimepicker.DatePickerInput(
+                format='%Y-%m-%d',
+                options={
+                    'locale': 'ja',
+                    'dayViewHeaderFormat': 'YYYY年 MMMM',
+                }
+            ).end_of('期間'),
+        }
 
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
@@ -108,29 +141,26 @@ class CategoryForm(forms.ModelForm):
             field.widget.attrs["class"] = "form-control"
 
 class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
     def __init__(self, *args, **kwargs):
         logger.debug('コメント2')
         super(CommentForm, self).__init__(*args, **kwargs)
-        logger.debug('コメント3')
         for field in self.fields.values():
             logger.debug(field)
             field.widget.attrs["class"] = "form-control"
 
-    class Meta:
-        model = Comment
-        fields = '__all__'
-        logger.debug('コメント1')
-
-
-
 class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = '__all__'
+
     def __init__(self, *args, **kwargs):
         super(ReplyForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"
-    class Meta:
-        model = Reply
-        fields = '__all__'
 
 class InfoForm(forms.ModelForm):
     class Meta:
@@ -155,5 +185,19 @@ class InfoForm(forms.ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super(InfoForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = Image
+        fields = ["title","description", "origin"]
+        file = forms.ImageField(
+            label='画像ファイル',
+            widget=forms.ClearableFileInput(attrs={'multiple': True})
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"

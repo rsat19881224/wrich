@@ -1,0 +1,42 @@
+{% extends "./_base.html" %}
+{% load bootstrap4 %}
+{% block page_name %}<i class="fa fa-pencil"></i>Imageファイルアップロード{% endblock %}
+{% block page_description %}画像ファイルを追加してください。{% endblock %}
+{% block content %}
+
+    {{ form.certifications.errors }}
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-info-circle"></i>ファイルアップロード</h3>
+          </div><!-- /.box-header -->
+			<form action="/image/upload/" method="post" enctype="multipart/form-data" class="form-horizontal">
+				{% csrf_token %}
+				{% for field in form %}
+				<div class="form-group">
+				    <label class="col-xs-2 control-label" for="{{ form.title.id_for_label }}">{{ field.label_tag }}</label>
+				    <div class="col-xs-10">
+				        {{ field }}
+				    </div>
+
+				    {% if field.help_text %}
+				        <small class="form-text text-muted">{{ field.help_text }}</small>
+				    {% endif %}
+
+				    {% for error in field.errors %}
+				        <small class="form-text text-danger">{{ error }}</small>
+				    {% endfor %}
+				</div>
+				{% endfor %}
+			    <div class="box-footer">
+	                <button type="submit" class="btn btn-primary command save pull-right"><i class="fa fa-save"></i>アップロード</button>
+	            </div>
+			</form>
+        </div><!-- /.box -->
+      </div>
+    </div>
+
+
+{% endblock %}

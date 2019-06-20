@@ -1,11 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.db import transaction
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404,render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import generic
-from django.views.generic import DetailView,TemplateView
+from django.views.generic import DetailView,TemplateView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
@@ -14,16 +14,17 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 import requests
+from django.views.decorators.http import require_GET, require_http_methods
 
 from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet, InfoFilterSet
-from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm, InfoForm
-from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info
+from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm, InfoForm, ImageForm
+from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info, Image
 
 #Chatwork連携用
-CHATWORK_API_TOKEN = '5b9460499bb66c1b61f650eeccbc08dd'
-CHATWORK_API_ROOM_ID = '81445055'
-CHATWORK_API_ENDPOINT_BASE = 'https://api.chatwork.com/v2' # default
-CHATWORK_API_BACKEND = 'chatwork.backends.http.UrllibBackend' # default if DEBUG = False
+CHATWORK_API_TOKEN = '5b9460499bb66c1b61f650eeccbc08dd' #R mytoken
+CHATWORK_API_ROOM_ID = '81445055' #R mytalk
+CHATWORK_API_ENDPOINT_BASE = 'https://api.chatwork.com/v2'
+CHATWORK_API_BACKEND = 'chatwork.backends.http.UrllibBackend' 
 CHATWORK_API_FAIL_SILENTLY = None   # default
 
 
@@ -472,3 +473,26 @@ class InfoDeleteView(LoginRequiredMixin, DeleteView):
 class InfoDetailView(LoginRequiredMixin, DetailView):
 
     model = Info
+
+
+@require_GET
+def image(request):
+    image = Image.objects.get(id=self.kwargs['pk'])
+    return render(request, 'article/Image_detail.html', {'image': image})
+
+@require_GET
+def image_list(request):
+    images = Image.objects.all()
+    return render(request, 'article/Image_list.html', {'images': images})
+
+
+@require_http_methods(["GET", "POST"])
+def upload(request):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = ImageForm()
+    return render(request, 'article/Image_upload.html', {'form': form})
