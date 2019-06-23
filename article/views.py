@@ -16,7 +16,7 @@ logger = getLogger(__name__)
 import requests
 from django.views.decorators.http import require_GET, require_http_methods
 
-from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet, InfoFilterSet
+from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet, InfoFilterSet, ImageFilterSet
 from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm, InfoForm, ImageForm
 from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info, Image
 
@@ -475,6 +475,32 @@ class InfoDetailView(LoginRequiredMixin, DetailView):
     model = Info
 
 
+
+
+class ImageFilterView(LoginRequiredMixin, FilterView):
+    model = Image
+    filterset_class = ImageFilterSet
+
+    queryset = Image.objects.all().order_by('-created_at')
+
+    # 1ページの表示
+    paginate_by = 10
+    object = Image
+
+    def get(self, request, **kwargs):
+        # 一覧画面内の遷移(GETクエリがある)ならクエリを保存する
+        if request.GET:
+            request.session['query'] = request.GET
+        # 詳細画面・登録画面からの遷移(GETクエリはない)ならクエリを復元する
+        else:
+            request.GET = request.GET.copy()
+            if 'query' in request.session.keys():
+                for key in request.session['query'].keys():
+                    request.GET[key] = request.session['query'][key]
+
+        return super().get(request, **kwargs)
+
+
 @require_GET
 def image(request):
     image = Image.objects.get(id=self.kwargs['pk'])
@@ -492,7 +518,7 @@ def upload(request):
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('/image/')
     else:
         form = ImageForm()
     return render(request, 'article/Image_upload.html', {'form': form})

@@ -189,14 +189,14 @@ class InfoForm(forms.ModelForm):
             field.widget.attrs["class"] = "form-control"
 
 class ImageForm(forms.ModelForm):
-    class Meta:
-        model = Image
-        fields = ["title","description", "origin"]
-        file = forms.ImageField(
+    origin = forms.ImageField(
             label='画像ファイル',
             widget=forms.ClearableFileInput(attrs={'multiple': True})
         )
-
+    class Meta:
+        model = Image
+        fields = ["title","description", "origin"]
+        
     def __init__(self, *args, **kwargs):
         super(ImageForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():

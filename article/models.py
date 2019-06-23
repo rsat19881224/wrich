@@ -26,6 +26,13 @@ class Image(models.Model):
     )
     created_at = models.DateTimeField(verbose_name='登録日',auto_now=True)
 
+    class Meta:
+        """
+        管理画面でのタイトル表示
+        """
+        verbose_name = '画像ファイル'
+        verbose_name_plural = '画像ファイル'
+
 #20190617
 class Site(models.Model):
     SITE_TYPE = (
@@ -111,8 +118,8 @@ class Category(models.Model):
 #20190617
 class Order(models.Model):
     STATUS_TYPE = (
-        (0, '指示中'), 
-        (1, '執筆中'), 
+        (0, '募集中'), 
+        (1, '指示中'), 
         (2, '入稿済み'), 
         (3, '公開済み'))
     site = models.ForeignKey(Site,verbose_name='サイト名',related_name='order_site',on_delete=models.CASCADE)
