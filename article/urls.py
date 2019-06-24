@@ -5,11 +5,14 @@ from . import views
 
 urlpatterns = [
     path('myboard/', views.MyboardView.as_view(), name='myboard'),
+
     path('', views.ArticleFilterView.as_view(), name='index'),
     path('detail/<int:pk>/', views.ArticleDetailView.as_view(), name='detail'),
     path('create/', views.ArticleCreateView.as_view(), name='create'),
     path('update/<int:pk>/', views.ArticleUpdateView.as_view(), name='update'),
     path('delete/<int:pk>/', views.ArticleDeleteView.as_view(), name='delete'),
+
+    path('fix/<int:pk>/', views.ArticleFixView.as_view(), name='fix'),
 
     path('comment/<int:pk>/', views.CommentView.as_view(), name='comment'),
     path('comment/update/<int:pk>/', views.CommentUpdateView.as_view(), name='comment_update'),

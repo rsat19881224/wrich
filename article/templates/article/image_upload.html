@@ -12,6 +12,7 @@
           <div class="box-header with-border">
             <h3 class="box-title"><i class="fa fa-info-circle"></i>ファイルアップロード</h3>
           </div><!-- /.box-header -->
+          <div class="box-body">
 			<form action="/image/upload/" method="post" enctype="multipart/form-data" class="form-horizontal">
 				{% csrf_token %}
 				{% for field in form %}
@@ -34,6 +35,7 @@
 	                <button type="submit" class="btn btn-primary command save pull-right"><i class="fa fa-save"></i>アップロード</button>
 	            </div>
 			</form>
+		  </div><!-- /.box body-->
         </div><!-- /.box -->
       </div>
     </div>

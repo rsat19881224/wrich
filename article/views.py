@@ -18,7 +18,7 @@ from django.views.decorators.http import require_GET, require_http_methods
 
 from .filters import ArticleFilterSet, CategoryFilterSet, SiteFilterSet, OrderFilterSet, InfoFilterSet, ImageFilterSet
 from .forms import ArticleForm, ArticleDetailFormSet, CommentForm, ReplyForm, CategoryForm, SiteForm, OrderForm, InfoForm, ImageForm
-from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info, Image
+from .models import Article, ArticleDetail, ArticleFix, Comment, Reply, Category, Site, Order, Info, Image
 
 #Chatwork連携用
 CHATWORK_API_TOKEN = '5b9460499bb66c1b61f650eeccbc08dd' #R mytoken
@@ -183,8 +183,10 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
         for detail_obj in objdetail:
             str_Html += '<h3>' + detail_obj.block_title + '</h3>'
             str_Html += detail_obj.block_content
+            #context['fix_list'] = ArticleFix.objects.filter(articledetail=detail_obj.id)
 
         context['html_pre'] = str_Html
+        
 
         return context
 
@@ -208,10 +210,57 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     success_url = reverse_lazy('index')
 
+#####################################################
+#
+#
+"""指摘投稿."""
+class ArticleFixView(generic.CreateView):    
+    model = ArticleFix
+    fields = ('block_fix',)
+    template_name = 'article/article_fix_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['detail_list'] = ArticleDetail.objects.filter(id=self.kwargs['pk'])
+        
+        return context
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super().get_form_kwargs(*args, **kwargs)
+        form_kwargs['initial'] = {'articledetail': self.kwargs['pk']}  # フォームに初期値を設定する。
+        
+        return form_kwargs 
+
+    def form_valid(self, form):
+        articledetail_pk = self.kwargs['pk']
+        articledetail = get_object_or_404(ArticleDetail, pk=articledetail_pk)
+        # 紐づく記事を設定する
+        articlefix = form.save(commit=False)
+        articlefix.articledetail = articledetail
+        articlefix.save()
+ 
+        # 記事詳細にリダイレクト
+        #return redirect(article.get_absolute_url())
+        return redirect('detail', pk=self.kwargs['pk'])
+
+
+#####################################################
+#
+#
 class MyboardView(TemplateView):
     template_name = 'article/Myboard.html'
 
+    #@cached_property
+    #def info(self):
+    #    """所持アイテム一覧"""
+    #    return Info.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['info_list'] = Info.objects.all().order_by('-created_at')
+
+        return context
 
 #####################################################
 #
@@ -409,7 +458,10 @@ class ReplyView(generic.CreateView):
         
         comment_pk = self.kwargs['pk']
         comment = get_object_or_404(Comment, pk=comment_pk)
- 
+
+        #art_comment = Comment.objects.select_related('target').filter(pk=comment_pk)
+        #logger.debug(art_comment)
+
         # 紐づくコメントを設定する
         reply = form.save(commit=False)
         reply.target = comment
@@ -417,7 +469,7 @@ class ReplyView(generic.CreateView):
  
         # 記事詳細にリダイレクト
         #return redirect('detail', pk=article.id)
-        return redirect('detail', pk=self.kwargs['pk'])
+        return redirect('detail', pk=1)
 
 class ReplyUpdateView(generic.UpdateView):
     template_name = 'article/article_comment_form.html'

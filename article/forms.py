@@ -5,7 +5,7 @@ from ckeditor.widgets import CKEditorWidget
 import bootstrap_datepicker_plus as datetimepicker
 from logging import getLogger
 logger = getLogger(__name__)
-from .models import Article, ArticleDetail, Comment, Reply, Category, Site, Order, Info, Image
+from .models import Article, ArticleDetail, ArticleFix, Comment, Reply, Category, Site, Order, Info, Image
 
 INTRO_WRITE_TYPE = (
         (1, '【パターン1】うまくいかないのはあなたのせいではありません！'), 
@@ -75,6 +75,16 @@ ArticleDetailFormSet = inlineformset_factory(
     min_num=1,
     validate_min=True,
 )
+
+class ArticleFixForm(forms.ModelForm):
+    class Meta:
+        model = ArticleFix
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleFixForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
 
 class SiteForm(forms.ModelForm):
     class Meta:
@@ -146,10 +156,8 @@ class CommentForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-        logger.debug('コメント2')
         super(CommentForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
-            logger.debug(field)
             field.widget.attrs["class"] = "form-control"
 
 class ReplyForm(forms.ModelForm):

@@ -15,7 +15,7 @@
      <!-- Default box -->
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">お知らせ</h3>
+          <h3 class="box-title"><i class="glyphicon glyphicon-bell"></i>お知らせ</h3>
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -26,9 +26,23 @@
           </div>
         </div>
         <div class="box-body">
-            <p>2019/06/21　お知らせお知らせお知らせ～</p>
-            <p>2019/06/21　お知らせお知らせお知らせ～</p>
-            <p>2019/06/21　お知らせお知らせお知らせ～</p>
+            <div class="box-body table-responsive">
+            <table id="info_list" class="table">
+                <tbody>
+                {% for info in info_list %}
+                <tr>
+                    <td>{{ info.created_at|date:"Y/m/d G:i:s" }}</td>
+                    <td>{{ info.note }}</td>
+                    <td>{{ info.created_by.get_full_name }}</td>
+                </tr>
+
+                {% empty %}
+                <p>お知らせはありません。</p>
+                {% endfor %}
+
+                </tbody>
+            </table>
+          </div><!-- /.box-body -->
         </div>
       </div>
       <!-- /.box -->

@@ -234,6 +234,35 @@ class ArticleDetail(models.Model):
     block_title = models.CharField(verbose_name='見出し', max_length=150,)
     block_content = models.TextField(verbose_name='内容',)
 
+class ArticleFix(models.Model):
+    articledetail = models.ForeignKey(
+        ArticleDetail,
+        on_delete=models.CASCADE)
+    block_fix = models.TextField(verbose_name='指摘',blank=True, null=True,)
+    confirm_date = models.DateField(verbose_name='確認日',blank=True, null=True,)
+    close_date = models.DateField(verbose_name='対応日',blank=True, null=True,)
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='作成者',
+        blank=True,
+        null=True,
+        related_name='Fix_CreatedBy',
+        on_delete=models.SET_NULL,
+        editable=False,
+        default=1,
+    )
+    created_at = models.DateTimeField(verbose_name='作成日',auto_now_add=True)
+
+    def __str__(self):
+        return self.block_fix
+
+    class Meta:
+        """
+        管理画面でのタイトル表示
+        """
+        verbose_name = '指摘'
+        verbose_name_plural = '指摘'
+
 #20190612 記事に対してコメント紐付け
 class Comment(models.Model):
     target = models.ForeignKey(Article,related_name='Comment_Article',on_delete=models.CASCADE)

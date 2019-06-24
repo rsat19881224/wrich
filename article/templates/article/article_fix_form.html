@@ -1,0 +1,45 @@
+{% extends "./_base.html" %}
+{% load bootstrap4 %}
+{% block page_name %}<i class="fa fa-pencil"></i>指摘事項追加{% endblock %}
+{% block page_description %}指摘内容を追加してください。{% endblock %}
+
+{% block content %}
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-info-circle"></i>入力フォーム</h3>
+          </div><!-- /.box-header -->
+          <form method="post" id="myform" class="form-horizontal">
+            <div class="box-body">
+                {% csrf_token %}
+                {% for detail in detail_list %}
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">
+                    見出内容</label>
+                    <div class="col-xs-10">
+                        <p class="form-control-static">
+                            {{ detail.block_content|linebreaksbr }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">
+                    指摘内容</label>
+                    <div class="col-xs-10">
+                        {{  form.block_fix  }}
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-default pull-right command save"><i class="fa fa-plus-square"></i>送信</button>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div>
+    </div>
+
+{% endblock %}
