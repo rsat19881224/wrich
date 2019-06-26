@@ -46,4 +46,6 @@ urlpatterns = [
     path('image/', views.ImageFilterView.as_view(), name='image'),
     path('image/upload/', views.upload, name='image_upload'),
     path('image/detail/<int:pk>/', views.image, name='image_detail'),
+
+    path('myboard/', views.UserView.as_view(), name='userinfo'),
 ]

@@ -11,9 +11,10 @@
 
     <!-- Main content -->
     <section class="content">
-
+<div class="row">
+        <div class="col-xs-8">
      <!-- Default box -->
-      <div class="box">
+      <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title"><i class="glyphicon glyphicon-bell"></i>お知らせ</h3>
 
@@ -33,7 +34,7 @@
                 <tr>
                     <td>{{ info.created_at|date:"Y/m/d G:i:s" }}</td>
                     <td>{{ info.note }}</td>
-                    <td>{{ info.created_by.get_full_name }}</td>
+                    <td><span class="label label-success">Shipped</span></td>
                 </tr>
 
                 {% empty %}
@@ -45,7 +46,79 @@
           </div><!-- /.box-body -->
         </div>
       </div>
-      <!-- /.box -->
+</div>
+<div class="col-md-4">
+          <!-- Info Boxes Style 2 -->
+          <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="glyphicon glyphicon-bell"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Inventory</span>
+              <span class="info-box-number">5,200</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 50%"></div>
+              </div>
+              <span class="progress-description">
+                    50% Increase in 30 Days
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+          <div class="info-box bg-green">
+            <span class="info-box-icon"><i class="ion ion-ios-heart-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Mentions</span>
+              <span class="info-box-number">92,050</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 20%"></div>
+              </div>
+              <span class="progress-description">
+                    20% Increase in 30 Days
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+          <div class="info-box bg-red">
+            <span class="info-box-icon"><i class="ion ion-ios-cloud-download-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Downloads</span>
+              <span class="info-box-number">114,381</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+              <span class="progress-description">
+                    70% Increase in 30 Days
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+          <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="ion-ios-chatbubble-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Direct Messages</span>
+              <span class="info-box-number">163,921</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 40%"></div>
+              </div>
+              <span class="progress-description">
+                    40% Increase in 30 Days
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        </div>
 
       <!-- Small boxes (Stat box) -->
       <div class="row">
@@ -111,6 +184,185 @@
         <!-- ./col -->
       </div>
       <!-- /.row -->
+
+
+      <div class="box">
+          <div class="p-3">
+            <!-- タブボタン部分 -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a href="#tab1" class="nav-link active" data-toggle="tab"><i class="fa fa-files-o"></i>オーダー</a>
+              </li>
+              <li class="nav-item">
+                <a href="#tab2" class="nav-link" data-toggle="tab"><i class="fa fa-files-o"></i>記事一覧</a>
+              </li>
+              <li class="nav-item">
+                <a href="#tab3" class="nav-link active" data-toggle="tab"><i class="glyphicon glyphicon-comment"></i>コメント</a>
+              </li>
+              <li class="nav-item">
+                <a href="#tab4" class="nav-link" data-toggle="tab"><i class="fa fa-pencil"></i>Image</a>
+              </li>
+            </ul>
+            <!--タブのコンテンツ部分-->
+            <div class="tab-content">
+              <div id="tab1" class="tab-pane active">
+                <div class="box-body table-responsive">
+                <table id="article_list" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">ID</th>
+                            <th style="text-align:center;">サイト名</th>
+                            <th style="text-align:center;">オーダー名</th>
+                            <th style="text-align:center;">キーワード</th>
+                            <th style="text-align:center;">記事内容</th>
+                            <th style="text-align:center;">納期/報酬</th>
+                            <th style="text-align:center;">発注日/発注先</th>
+                            <th style="text-align:center;">登録日/登録者</th>
+                            <th style="width:80px;text-align:center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in user_orders %}
+                    <tr>
+                        <td rowspan="2">{{ order.id }}</td>
+                        <td rowspan="2"><a href="{% url 'order_detail' order.pk %}">{{ order.site }}</a></td>
+                        <td rowspan="2">{{ order.title }}</td>
+                        <td rowspan="2">{{ order.keyword }}</td>
+                        <td rowspan="2">{{ order.description }}</td>
+                        <td>{{ order.limit_date|date:"Y/m/d" }}</td>
+                        <td>{{ order.order_date|date:"Y/m/d"  }}</td>
+                        <td>{{ order.created_at|date:"Y/m/d G:i:s" }}</td>
+                        <td><a href="{% url 'order_update' order.pk %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>編集</a></td>
+                    </tr>
+                    <tr>
+                        <td>{{ order.salary }}</td>
+                        <td>{{ order.order_user.get_full_name }}</td>
+                        <td>{{ order.created_at.get_full_name }}</td>
+                        <td><a href="{% url 'order_delete' order.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
+                    </tr>
+                    {% empty %}
+                    <p>対象のデータがありません</p>
+                    {% endfor %}
+                    </tbody>
+                </table>
+              </div><!-- /.box-body -->
+              </div>
+              <div id="tab2" class="tab-pane">
+                <div class="box-body table-responsive">
+                <table id="article_list" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width:10px;text-align:center;">ID</th>
+                            <th style="text-align:center;">記事名</th>
+                            <th style="width:750px;text-align:center;">導入文</th>
+                            <th style="width:200px;text-align:center;">タイプ</th>
+                            <th style="width:200px;text-align:center;">タグ</th>
+                            <th style="width:80px;text-align:center;">状態</th>
+                            <th style="width:80px;text-align:center;">作成者/作成日</th>
+                            <th style="width:80px;text-align:center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for article in user_articles %}
+                    <tr>
+                        <td rowspan="2">{{ article.id }}</td>
+                        <td rowspan="2"><a href="{% url 'detail' article.pk %}">{{ article.intro_title }}</a></td>
+                        <td rowspan="2">{{ article.intro_content }}</td>
+                        <td rowspan="2">{{ article.get_intro_type_display }}</td>
+                        <td rowspan="2">{{ article.keyword }}</td>
+                        <td rowspan="2">{{ article.check }}</td>
+                        <td>{{ article.created_by.get_full_name }}</td>
+                        <td><a href="{% url 'update' article.pk %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>編集</a></td>
+                    </tr>
+                    <tr>
+                        <td>{{ article.created_at|date:"Y/m/d G:i:s" }}</td>
+                        <td><a href="{% url 'delete' article.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
+                    </tr>
+                    {% empty %}
+                    <p>対象のデータがありません</p>
+                    {% endfor %}
+                    </tbody>
+                </table>
+              </div><!-- /.box-body -->
+              </div>
+              <div id="tab3" class="tab-pane">
+                <div class="box-body table-responsive">
+                  <table id="article_list" class="table table-bordered">
+                    {% for comment in user_comments %}
+                    {% if forloop.first %}
+                    <thead>
+                        <tr>
+                            <th style="width:150px;text-align:center;">投稿者<br>投稿日時</th>
+                            <th style="text-align:center;">コメント/返信</th>
+                            <th style="width:80px;text-align:center;"></th>
+                            <th style="width:80px;text-align:center;"></th>
+                        </tr>
+                    </thead>
+                    {% endif %}
+                    <tbody>
+                    <tr>
+                        <td>
+                            <i class="glyphicon glyphicon-user"></i>{{ comment.created_by }}<br>
+                            <i class="glyphicon glyphicon-time"></i>{{ comment.created_at }}
+                        </td>
+                        <td>
+                            <a href="{% url 'comment_update' comment.pk %}" class="">{{ comment.content }}</a>
+                            {% for reply in comment.reply_set.all %}
+                            <hr>
+                            <div style="margin-left:50px;">
+                                <i class="fa fa-mail-reply"></i><i class="glyphicon glyphicon-user"></i>{{ reply.created_by }}:<i class="glyphicon glyphicon-time"></i>{{ reply.created_at }}<br>
+                                <a href="{% url 'reply_update' reply.pk %}" class="">{{ reply.content }}</a>
+                            </div>
+                            {% endfor %}
+                        </td>
+                        <td><a href="{% url 'reply' comment.pk %}" class="btn btn-primary btn-sm"><i class="fa fa-mail-reply"></i>返信</a></td>
+                        <td><a href="{% url 'delete' comment.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
+                    </tr>
+                    {% empty %}
+                    <p> ※コメントはありません。</p>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div><!-- /.box-body -->
+              </div>
+              <div id="tab4" class="tab-pane">
+                <div class="box-body table-responsive">
+                <table id="article_list" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width:80px;text-align:center;">ID</th>
+                            <th style="text-align:center;">タイトル</th>
+                            <th style="text-align:center;">画像概要</th>
+                            <th style="text-align:center;">ファイル名</th>
+                            <th style="text-align:center;">アップロード者/アップロード日</th>
+                            <th style="width:80px;text-align:center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for image in user_imgages %}
+                    <tr>
+                        <td rowspan="2"><img src="{{ image.thumbnail.url }}" width="250">{{ image.id }}</td>
+                        <td rowspan="2">{{ image.title }}</td>
+                        <td rowspan="2">{{ image.description }}</td>
+                        <td rowspan="2">{{ image.origin }}</td>
+                        <td>{{ info.created_by.get_full_name }}</td>
+                        <td><a href="" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>編集</a></td>
+                    </tr>
+                    <tr>
+                        <td>{{ info.created_at|date:"Y/m/d G:i:s" }}</td>
+                        <td><a href="" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
+                    </tr>
+                    {% empty %}
+                    <p>対象のデータがありません</p>
+                    {% endfor %}
+                    </tbody>
+                </table>
+              </div><!-- /.box-body -->
+              </div>
+            </div>
+          </div>
+      </div>
+     
 
       <!-- TO DO List -->
       <div class="box box-primary">

@@ -134,6 +134,7 @@ class Order(models.Model):
     order_user = models.ForeignKey(User,verbose_name='発注先',related_name='order_user',on_delete=models.SET_NULL, blank=True, null=True,default=1)
     order_date = models.DateField(verbose_name='発注日',blank=True,)
     accept_date = models.DateField(verbose_name='受注日',blank=True,)
+    pay_date = models.DateField(verbose_name='支払日',blank=True, null=True,)
     category = models.ForeignKey(Category,verbose_name='カテゴリ',related_name='order_category',null=True, blank=True,on_delete=models.CASCADE)
     status = models.IntegerField(verbose_name='状態', choices=STATUS_TYPE, default=0,)
     created_by = models.ForeignKey(

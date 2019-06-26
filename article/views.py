@@ -186,7 +186,7 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
             #context['fix_list'] = ArticleFix.objects.filter(articledetail=detail_obj.id)
 
         context['html_pre'] = str_Html
-        
+        context['html_len'] = '{:,}'.format(len(str_Html))
 
         return context
 
@@ -257,8 +257,11 @@ class MyboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context['info_list'] = Info.objects.all().order_by('-created_at')
+        context['user_orders'] = Order.objects.filter(order_user=self.request.user).order_by('-created_at')
+        context['user_articles'] = Article.objects.filter(created_by=self.request.user).order_by('-created_at')
+        context['user_comments'] = Comment.objects.filter(created_by=self.request.user).order_by('-created_at')
+        context['user_imgages'] = Image.objects.filter(created_by=self.request.user).order_by('-created_at')
 
         return context
 
@@ -574,3 +577,25 @@ def upload(request):
     else:
         form = ImageForm()
     return render(request, 'article/Image_upload.html', {'form': form})
+
+
+
+class UserView(TemplateView):
+    template_name = 'article/user_info.html'
+
+    #@cached_property
+    #def info(self):
+    #    """所持アイテム一覧"""
+    #    return Info.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['info_list'] = Info.objects.all().order_by('-created_at')
+        context['user_orders'] = Order.objects.filter(order_user=self.request.user).order_by(-created_at)
+        context['user_articles'] = Article.objects.filter(created_by=self.request.user).order_by(-created_at)
+        context['user_comments'] = Comment.objects.filter(created_by=self.request.user).order_by(-created_at)
+        context['user_imgages'] = Image.objects.filter(created_by=self.request.user).order_by(-created_at)
+
+        #ユーザー別、未払い件数のおよび金額の表示、依頼サイトorサービスグループ化？
+
+        return context

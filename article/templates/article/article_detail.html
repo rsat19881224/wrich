@@ -71,8 +71,10 @@
     <script>
         $(function() {
             var source = $('input:hidden[name="txtsource"]').val();
+            var intro_source = $('input:hidden[name="intro_txtsource"]').val();
             
             $('#preview').html(source);
+            $('#intro_preview').html(intro_source);
 
             //ブラウザチェック　safariは現在対応不可 html5 File API
             if (typeof Blob !== "undefined") {

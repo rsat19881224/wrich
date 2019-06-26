@@ -1,0 +1,111 @@
+{% extends "./_base.html" %}
+{% block page_name %}<i class="fa fa-files-o"></i>ユーザ一覧{% endblock %}
+{% block page_description %}登録済みデータを参照します。{% endblock %}
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="box box-primary">
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap">
+            <form id="filter" method="get">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div>
+                            {{ filter.form|crispy }}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-primary " href="{% url 'site_create' %}"><i class="fa fa-plus"></i>新規作成</a>
+                        <button type="submit" class="btn btn-default btn-sm pull-right" form="filter"><i class="fa fa-search"></i>検索</button>
+                        <a class="btn btn-danger btn-sm pull-right" href="?page=1"><i class="fa fa-close"></i>解除</a>
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+          <div class="box-body table-responsive">
+            <table id="article_list" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width:10px;text-align:center;">ID</th>
+                        <th style="text-align:center;">記事名</th>
+                        <th style="width:750px;text-align:center;">導入文</th>
+                        <th style="width:200px;text-align:center;">タイプ</th>
+                        <th style="width:200px;text-align:center;">タグ</th>
+                        <th style="width:80px;text-align:center;">状態</th>
+                        <th style="width:80px;text-align:center;">作成者/作成日</th>
+                        <th style="width:80px;text-align:center;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for article in user_articles %}
+                <tr>
+                    <td rowspan="2">{{ article.id }}</td>
+                    <td rowspan="2"><a href="{% url 'detail' article.pk %}">{{ article.intro_title }}</a></td>
+                    <td rowspan="2">{{ article.intro_content }}</td>
+                    <td rowspan="2">{{ article.get_intro_type_display }}</td>
+                    <td rowspan="2">{{ article.keyword }}</td>
+                    <td rowspan="2">{{ article.check }}</td>
+                    <td>{{ article.created_by.get_full_name }}</td>
+                    <td><a href="{% url 'update' article.pk %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>編集</a></td>
+                </tr>
+                <tr>
+                    <td>{{ article.created_at|date:"Y/m/d G:i:s" }}</td>
+                    <td><a href="{% url 'delete' article.pk %}" class="btn btn-danger btn-sm" id="btn_del"><i class="fa fa-trash"></i>削除</a></td>
+                </tr>
+
+                {% empty %}
+                <p>対象のデータがありません</p>
+                {% endfor %}
+
+                </tbody>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12">
+
+            {% if is_paginated %}
+            <ul class="pagination">
+                <!-- 前へ の部分 -->
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- 数字の部分 -->
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link" href="#!">{{ num }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- 次へ の部分 -->
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+

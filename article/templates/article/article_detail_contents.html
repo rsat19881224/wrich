@@ -1,104 +1,106 @@
 <form method="post" id="myform" class="form-horizontal">
     <div class="box-body">
-        <div class="form-group">
-            <label class="col-xs-2 control-label">記事名</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.intro_title|default_if_none:"未入力"  }}</p>
-            </div>
-        </div>
+        <table class="table-bordered">
+            <tr>
+                <td class="col-xs-1 ">オーダーID</td>
+                <td class="col-xs-1 ">{{  article.order_id.id }}</td>
+                <td class="col-xs-1 ">オーダー名</td>
+                <td class="col-xs-5 ">{{  article.order_id }}</td>
+                <td class="col-xs-1 ">依頼者</td>
+                <td class="col-xs-1 ">{{  article.order_id.created_by.get_full_name }}</td>
+                <td class="col-xs-1 ">依頼日時</td>
+                <td class="col-xs-1 ">{{  article.order_id.created_at|date:"Y/m/d G:i:s" }}</td>
+            </tr>
+            <tr>
+                <td class="col-xs-1 ">記事ID</td>
+                <td class="col-xs-1 ">{{  article.id }}</td>
+                <td class="col-xs-1 ">記事名</td>
+                <td class="col-xs-5 ">{{  article.intro_title }}</td>
+                <td class="col-xs-1 ">執筆者</td>
+                <td class="col-xs-1 ">{{  article.created_by.get_full_name }}</td>
+                <td class="col-xs-1 ">執筆日時</td>
+                <td class="col-xs-1 ">{{  article.created_at|date:"Y/m/d G:i:s" }}</td>
+            </tr>
+            <tr>
+                <td class="col-xs-1 ">文字数</td>
+                <td class="col-xs-1 ">{{  html_len }}</td>
+                <td class="col-xs-1 ">タイプ</td>
+                <td class="col-xs-5 ">{{  article.get_intro_type_display }}</td>
+                <td class="col-xs-1 ">更新者</td>
+                <td class="col-xs-1 ">{{  article.updated_by.get_full_name }}</td>
+                <td class="col-xs-1 ">更新日時</td>
+                <td class="col-xs-1 ">{{  article.updated_at|date:"Y/m/d G:i:s" }}</td>
+            </tr>
+            <tr>
+                <td class="col-xs-1 ">導入文</td>
+                <td class="col-xs-7 " colspan="5">
+                    <div class="p-3">
+                      <!-- タブボタン部分 -->
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                          <a href="#tab1" class="nav-link active" data-toggle="tab">HTML</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tab2" class="nav-link" data-toggle="tab">ソース</a>
+                        </li>
+                      </ul>
+                      <!--タブのコンテンツ部分-->
+                      <div class="tab-content">
+                        <div id="tab1" class="tab-pane active">
+                          <p class="form-control-static"><div id="intro_preview"></div></p>
+                        </div>
+                        <div id="tab2" class="tab-pane">
+                          <p class="form-control-static"><br>{{  article.intro_content|linebreaksbr  }}</p>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+                <td class="col-xs-1 ">タグ</td>
+                <td class="col-xs-3 ">{{  article.keyword }}</td>
+            </tr>
+        </table>
 
-        <div class="form-group">
-            <label class="col-xs-2 control-label">タイプ</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.get_intro_type_display|default_if_none:"未入力"  }}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-xs-2 control-label">導入文</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.intro_content|linebreaksbr  }}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-xs-2 control-label">タグ</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.keyword|default_if_none:"未入力"  }}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-xs-2 control-label">作成者</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.created_by.get_full_name  }}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-xs-2 control-label">作成日時</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.created_at|date:"Y/m/d G:i:s"  }}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-xs-2 control-label">更新者</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.updated_by.get_full_name  }}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-xs-2 control-label">更新日時</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{  article.updated_at|date:"Y/m/d G:i:s"  }}</p>
-            </div>
-        </div>
     </div>
     <hr>
     {% for detail in article.articledetail_set.all %}
         <div class="box">
             <div class="box-header with-border">
               <h4 class="box-title"><i class="fa fa-file-text-o"></i>ブロック{{ forloop.counter }}</h4>
-
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"　title="Collapse">
                   <i class="fa fa-minus"></i></button>
               </div>
             </div>
+
             <div class="box-body">
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">表示順</label>
-                    <div class="col-xs-10">
-                        <p class="form-control-static">{{  detail.order_id  }}</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">見出し</label>
-                    <div class="col-xs-10">
-                        <p class="form-control-static">{{  detail.block_title  }}</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">内容</label>
-                    <div class="col-xs-10">
-                        <p class="form-control-static">{{  detail.block_content|linebreaksbr  }}</p>
-                    </div>
-                </div>
+                <table class="table-bordered">
+                    <tr>
+                        <td class="col-xs-1 ">表示順</td>
+                        <td class="col-xs-1 ">{{  detail.order_id }}</td>
+                        <td class="col-xs-1 ">見出し</td>
+                        <td class="col-xs-9 ">{{  detail.block_title }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-1 ">内容</td>
+                        <td class="col-xs-11 " colspan="3">{{  detail.block_content|linebreaksbr }}</td>
+                    </tr>
+                
+            
+                {% for fix in detail.articlefix_set.all %}
+                    <tr>
+                        <td class="col-xs-1 "><i class="glyphicon glyphicon-triangle-right"></i>指摘</td>
+                        <td class="col-xs-11 " colspan="3"  style="margin-left:50px;">
+                            <small>
+                                <i class="glyphicon glyphicon-user"></i>{{ fix.created_by }}:
+                                <i class="glyphicon glyphicon-time"></i>{{ fix.created_at }}<br>{{ fix.block_fix|linebreaksbr }}
+                            </small>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
             </div>
             <div class="box-footer">
-                {% for fix in detail.articlefix_set.all %}
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">指摘内容</label>
-                    <div class="col-xs-10">
-                        <p class="form-control-static">{{  fix.block_fix  }}</p>
-                    </div>
-                </div>
-                {% endfor %}
-                <a class="btn btn-default command save" href="{% url 'fix' detail.pk %}"><i class="fa fa-plus-square pull-right"></i>指摘する</a>
+                <a class="btn btn-default command save btn-block " href="{% url 'fix' detail.pk %}"><i class="glyphicon glyphicon-alert"></i>指摘する</a>
             </div>
         </div>
         <!-- /.box -->
@@ -109,6 +111,7 @@
     <input type="hidden" name="article_title" id="article_title" value="{{ article.intro_title }}">
     <input type="hidden" name="article_update" id="article_update" value="{{ article.updated_at }}">
     <input type="hidden" name="txtsource" id="txtsource" value="{{  html_pre  }}">
+    <input type="hidden" name="intro_txtsource" id="intro_txtsource" value="{{  article.intro_content|linebreaksbr  }}">
 </form>
 
 
