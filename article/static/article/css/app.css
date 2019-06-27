@@ -1,3 +1,7 @@
+html {
+  font-size: 30.5%;
+}
+
 #id_intro_title {
 	width: 100%;
 }
@@ -24,3 +28,20 @@
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
+table {
+  border-collapse: collapse;
+  border: 1px solid #666;
+}
+
+td, th {
+  border: 1px solid #666;
+  padding: 0.5em;
+}
+
+td.midashi{
+	color:white;
+	background:#008080;
+	text-align:center;
+	vertical-align:middle;
+	font-weight: bold;
+}

@@ -2,37 +2,37 @@
     <div class="box-body">
         <table class="table-bordered">
             <tr>
-                <td class="col-xs-1 ">オーダーID</td>
+                <td class="col-xs-1 midashi">オーダーID</td>
                 <td class="col-xs-1 ">{{  article.order_id.id }}</td>
-                <td class="col-xs-1 ">オーダー名</td>
+                <td class="col-xs-1 midashi">オーダー名</td>
                 <td class="col-xs-5 ">{{  article.order_id }}</td>
-                <td class="col-xs-1 ">依頼者</td>
+                <td class="col-xs-1 midashi">依頼者</td>
                 <td class="col-xs-1 ">{{  article.order_id.created_by.get_full_name }}</td>
-                <td class="col-xs-1 ">依頼日時</td>
+                <td class="col-xs-1 midashi">依頼日時</td>
                 <td class="col-xs-1 ">{{  article.order_id.created_at|date:"Y/m/d G:i:s" }}</td>
             </tr>
             <tr>
-                <td class="col-xs-1 ">記事ID</td>
+                <td class="col-xs-1 midashi">記事ID</td>
                 <td class="col-xs-1 ">{{  article.id }}</td>
-                <td class="col-xs-1 ">記事名</td>
+                <td class="col-xs-1 midashi">記事名</td>
                 <td class="col-xs-5 ">{{  article.intro_title }}</td>
-                <td class="col-xs-1 ">執筆者</td>
+                <td class="col-xs-1 midashi">執筆者</td>
                 <td class="col-xs-1 ">{{  article.created_by.get_full_name }}</td>
-                <td class="col-xs-1 ">執筆日時</td>
+                <td class="col-xs-1 midashi">執筆日時</td>
                 <td class="col-xs-1 ">{{  article.created_at|date:"Y/m/d G:i:s" }}</td>
             </tr>
             <tr>
-                <td class="col-xs-1 ">文字数</td>
+                <td class="col-xs-1 midashi">文字数</td>
                 <td class="col-xs-1 ">{{  html_len }}</td>
-                <td class="col-xs-1 ">タイプ</td>
+                <td class="col-xs-1 midashi">タイプ</td>
                 <td class="col-xs-5 ">{{  article.get_intro_type_display }}</td>
-                <td class="col-xs-1 ">更新者</td>
+                <td class="col-xs-1 midashi">更新者</td>
                 <td class="col-xs-1 ">{{  article.updated_by.get_full_name }}</td>
-                <td class="col-xs-1 ">更新日時</td>
+                <td class="col-xs-1 midashi">更新日時</td>
                 <td class="col-xs-1 ">{{  article.updated_at|date:"Y/m/d G:i:s" }}</td>
             </tr>
             <tr>
-                <td class="col-xs-1 ">導入文</td>
+                <td class="col-xs-1 midashi">導入文</td>
                 <td class="col-xs-7 " colspan="5">
                     <div class="p-3">
                       <!-- タブボタン部分 -->
@@ -55,7 +55,7 @@
                       </div>
                     </div>
                 </td>
-                <td class="col-xs-1 ">タグ</td>
+                <td class="col-xs-1 midashi">タグ</td>
                 <td class="col-xs-3 ">{{  article.keyword }}</td>
             </tr>
         </table>
@@ -75,13 +75,13 @@
             <div class="box-body">
                 <table class="table-bordered">
                     <tr>
-                        <td class="col-xs-1 ">表示順</td>
+                        <td class="col-xs-1 midashi">表示順</td>
                         <td class="col-xs-1 ">{{  detail.order_id }}</td>
-                        <td class="col-xs-1 ">見出し</td>
+                        <td class="col-xs-1 midashi">見出し</td>
                         <td class="col-xs-9 ">{{  detail.block_title }}</td>
                     </tr>
                     <tr>
-                        <td class="col-xs-1 ">内容</td>
+                        <td class="col-xs-1 midashi">内容</td>
                         <td class="col-xs-11 " colspan="3">{{  detail.block_content|linebreaksbr }}</td>
                     </tr>
                 
