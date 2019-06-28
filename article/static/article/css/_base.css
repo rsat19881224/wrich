@@ -8,10 +8,10 @@ summary {
 
 table {
   border-collapse: collapse;
-  border: 1px solid #666;
+  border: 1px solid #02a1b0;
 }
 td, th {
-  border: 1px solid #666;
+  border: 1px solid #02a1b0;
   padding: 0.5em;
 }
 
@@ -20,5 +20,4 @@ td.midashi{
 	background:#008080;
 	text-align:center;
 	vertical-align:middle;
-	font-weight: bold; 
 }
