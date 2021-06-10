@@ -1,4 +1,4 @@
-Django==2.1.2
+Django==2.2.24
 django-adminlte2==0.4.1
 django-bootstrap4==0.0.8
 django-crispy-forms==1.7.2
